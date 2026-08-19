@@ -1,10 +1,12 @@
 .DS_Store
+.cockle_temp/
 .ipynb_checkpoints/
 .venv/
 __pycache__/
 *.py[cod]
 *.doit.db
 /.cache/
+/cockle_wasm_env/
 /_output/
 /_site/
 /lite/

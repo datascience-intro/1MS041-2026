@@ -30,6 +30,13 @@ jobs:
             requirements-jupyterlite.txt
             requirements-pyodide.txt
 
+      - name: Set up micromamba for Cockle
+        uses: mamba-org/setup-micromamba@v3
+        with:
+          micromamba-version: "2.9.0-0"
+          init-shell: none
+          post-cleanup: all
+
       - name: Install JupyterLite build dependencies
         run: python -m pip install -r requirements-jupyterlite.txt
 
@@ -50,6 +57,7 @@ jobs:
           test -f _site/index.html
           test -f _site/lite/lab/index.html
           test -f _site/lite/jupyter-lite.json
+          python -c 'import json; config = json.load(open("_site/lite/jupyter-lite.json")); assert config["jupyter-config-data"]["terminalsAvailable"] is True'
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v4
