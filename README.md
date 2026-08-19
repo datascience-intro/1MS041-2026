@@ -38,7 +38,7 @@ jupyter lite serve
 
 Open the URL printed by the command. Notebooks execute in the browser with the Pyodide Python kernel.
 
-The browser environment starts with the same package set as the 2025 course. The original pins in `notebooks/requirements.txt` remain the source for regular local Python environments. Pyodide supplies WebAssembly-compatible builds of IPython, Matplotlib, NumPy, pandas, scikit-learn, SciPy, and SymPy. The additional packages in `requirements-pyodide.txt` are merged into a custom browser lock during the JupyterLite build. All of these packages become available automatically when imported; notebook-level `%pip` setup is not required. The first import can still download and cache a package in the browser.
+The browser environment starts with the same package set as the 2025 course. The original pins in `notebooks/requirements.txt` remain the source for regular local Python environments. Pyodide supplies WebAssembly-compatible builds of IPython, Matplotlib, NumPy, pandas, scikit-learn, SciPy, and SymPy. The additional packages in `requirements-pyodide.txt` are merged into a custom browser lock during the JupyterLite build. The complete course stack is prefetched when the kernel starts, allowing packages imported indirectly by helper modules to work without notebook-level `%pip` setup. The first kernel startup therefore downloads more data, which the browser caches for subsequent use.
 
 ## Deploy
 

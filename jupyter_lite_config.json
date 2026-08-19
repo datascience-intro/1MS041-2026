@@ -5,6 +5,16 @@
   },
   "PyodideLockAddon": {
     "enabled": true,
-    "specs": ["-r requirements-pyodide.txt"]
+    "specs": ["-r requirements-pyodide.txt"],
+    "prefetch_extra": [
+      "ipywidgets",
+      "matplotlib",
+      "numpy",
+      "pandas",
+      "plotly",
+      "scikit-learn",
+      "scipy",
+      "sympy"
+    ]
   }
 }
