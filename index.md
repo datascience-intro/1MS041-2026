@@ -1,9 +1,15 @@
 ---
+layout: default
+title: Introduction to Data Science 1MS041
+---
+
 ## Introduction to Data Science 1MS041
 
 You can download the Lecture notes [here](https://datascience-intro.github.io/1MS041-2026/Files/LectureNotes1MS041.pdf).
 
 Precision Recall survey [here](https://datascience-intro.github.io/1MS041-2026/Files/AveragePrecision.pdf)
+
+Open [JupyterLite](https://datascience-intro.github.io/1MS041-2026/lite/lab/index.html) to create, open, and run the course notebooks in your browser.
 
 
 ### Introductory Jupyter .ipynb Notebooks
