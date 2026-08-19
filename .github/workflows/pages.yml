@@ -26,7 +26,9 @@ jobs:
         with:
           python-version: "3.13"
           cache: pip
-          cache-dependency-path: requirements-jupyterlite.txt
+          cache-dependency-path: |
+            requirements-jupyterlite.txt
+            requirements-pyodide.txt
 
       - name: Install JupyterLite build dependencies
         run: python -m pip install -r requirements-jupyterlite.txt

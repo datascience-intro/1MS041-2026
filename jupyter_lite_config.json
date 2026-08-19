@@ -2,5 +2,9 @@
   "LiteBuildConfig": {
     "contents": ["notebooks"],
     "output_dir": "lite"
+  },
+  "PyodideLockAddon": {
+    "enabled": true,
+    "specs": ["-r requirements-pyodide.txt"]
   }
 }

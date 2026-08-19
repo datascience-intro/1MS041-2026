@@ -1,0 +1,4 @@
+# Packages from notebooks/requirements.txt that are not already supplied by
+# the Pyodide 314.0.5 distribution used by jupyterlite-pyodide-kernel 0.8.4.
+ipywidgets==8.1.7
+plotly==6.3.0

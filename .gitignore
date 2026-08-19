@@ -4,6 +4,7 @@
 __pycache__/
 *.py[cod]
 *.doit.db
+/.cache/
 /_output/
 /_site/
 /lite/
