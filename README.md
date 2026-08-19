@@ -6,6 +6,12 @@ This repository publishes the course website and a browser-based JupyterLite env
 
 Put notebooks and their supporting files in `notebooks/`. The directory becomes the root of JupyterLite's file browser, so paths such as `data/example.csv` and `images/plot.png` remain relative to each notebook.
 
+The course's pinned Python packages are copied from the 2025 repository into `notebooks/requirements.txt`. For a regular local Jupyter environment, install them with:
+
+```bash
+python -m pip install -r notebooks/requirements.txt
+```
+
 When matching HTML exports are available, regenerate the course pages from the repository root:
 
 ```bash
@@ -31,6 +37,8 @@ jupyter lite serve
 ```
 
 Open the URL printed by the command. Notebooks execute in the browser with the Pyodide Python kernel.
+
+The course requirements file is included as JupyterLite content, but it is not installed into the browser kernel during the site build. JupyterLite uses WebAssembly-compatible packages from Pyodide, whose available versions can differ from the regular Python pins. Missing compatible packages can be installed from a notebook with `%pip install package-name`.
 
 ## Deploy
 
