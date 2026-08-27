@@ -7,54 +7,50 @@ title: Introduction to Data Science 1MS041
 
 You can download the Lecture notes [here](https://datascience-intro.github.io/1MS041-2026/Files/LectureNotes1MS041.pdf).
 
-Precision Recall survey [here](https://datascience-intro.github.io/1MS041-2026/Files/AveragePrecision.pdf)
-
 Open [JupyterLite](https://datascience-intro.github.io/1MS041-2026/lite/lab/index.html) to create, open, and run the course notebooks in your browser.
-
-
-### Introductory Jupyter .ipynb Notebooks
-These notebooks contain the basic theory of how to work with python and BASH, that will be needed in this course.
-
-A01. [A01-BASH_Unix_Shell](A01-BASH_Unix_Shell.md)
 
 ### Individual Jupyter .ipynb lecture Notebooks
 
-These notebooks are numbered according to which lecture they coincide with and will be updated after the lectures. Before the lecture they can be considered preliminary.
+These notebooks are numbered according to the lecture they accompany and will be updated after the lectures. Before a lecture, its notebook may be preliminary.
 
-01. [01-Probability](01-Probability.md)
-02. [02-Random_Variables](02-Random_Variables.md)
-02. [02-Random_Variables_examples](02-Random_Variables_examples.md)
-03. [03-Random_Variables](03-Random_Variables.md)
-04. [04-Concentration_and_Limits](04-Concentration_and_Limits.md)
-05. [05-Limits](05-Limits.md)
-05. [05-Risk](05-Risk.md)
-06. [06-Fundamentals_of_estimation](06-Fundamentals_of_estimation.md)
-07. [07-Estimation_Likelihood](07-Estimation_Likelihood.md)
-07. [07-Optimization](07-Optimization.md)
-07. [07-StandardError](07-StandardError.md)
-08. [08-GeneratingRandomVariables](08-GeneratingRandomVariables.md)
-08. [08-PRNG](08-PRNG.md)
-09. [09-Markov_chains](09-Markov_chains.md)
-10. [10-Pattern_Recognition](10-Pattern_Recognition.md)
-11. [11-Training_Testing_Metrics](11-Training_Testing_Metrics.md)
-12. [12-Regression](12-Regression.md)
-13. [13-High_Dimension](13-High_Dimension.md)
-14. [14-Dimensionality_Reduction](14-Dimensionality_Reduction.md)
-15. [15-Extra_Topics](15-Extra_Topics.md)
+01. [01-Probability](01-Probability/)
+02. [02-Random_Variables](02-Random_Variables/)
+03. [03-Random_Variables](03-Random_Variables/)
+04. [04-Concentration_and_Limits](04-Concentration_and_Limits/)
+05. [05-Limits_and_Risk](05-Limits_and_Risk/)
+06. [06-Fundamentals_of_estimation](06-Fundamentals_of_estimation/)
+07. [07-Risk_Likelihood_and_Estimation](07-Risk_Likelihood_and_Estimation/)
+08. [08-Random_Generation_and_Markov_Simulation](08-Random_Generation_and_Markov_Simulation/)
+09. [09-Markov_chains](09-Markov_chains/)
+11. [11-Pattern_Recognition](11-Pattern_Recognition/)
+12. [12-Training_Testing_Metrics](12-Training_Testing_Metrics/)
+13. [13-High_Dimension](13-High_Dimension/)
+14. [14-Dimensionality_Reduction](14-Dimensionality_Reduction/)
+15. [15-Extra_Topics](15-Extra_Topics/)
 
 ### Problem Solving Sessions
 
-These notebooks are numbered according to which problem solving session they coincide with.
+These notebooks are numbered according to the problem-solving session they accompany.
 
+ProbSS01. [ProbSS01-Probability](ProbSS01-Probability/)
+ProbSS02. [ProbSS02-Data](ProbSS02-Data/)
+ProbSS03. [ProbSS03-Uncertainty](ProbSS03-Uncertainty/)
+ProbSS04. [ProbSS04-Estimation](ProbSS04-Estimation/)
+ProbSS05. [ProbSS05-Markov](ProbSS05-Markov/)
+ProbSS06. [ProbSS06-Classification](ProbSS06-Classification/)
+ProbSS07. [ProbSS07-Workflow](ProbSS07-Workflow/)
+ProbSS08. [ProbSS08-Dimension_Clustering](ProbSS08-Dimension_Clustering/)
 
 ### Starting package
 * Download the [Starting package](Files/first_lecture_and_data.zip)
-* Unzip this into a folder that you will use as the base folder
-* Whenever you download the next lectures as `ipynb` files, you put them in the same place as `*.ipynb`, this way all pathways will be the same for all of us.
+* Unzip this into the folder that you will use as the course base folder.
+* Put each later `*.ipynb` download in the same folder so that its relative data and image paths continue to work.
 
-### Assignment notebooks (Will be empty until it is time)
+### Assignment notebooks
 
-1. [Assignment_1](Assignment_1.md)
-2. [Assignment_2](Assignment_2.md)
-3. [Assignment_3](Assignment_3.md)
-4. [Assignment_4](Assignment_4.md)
+Unreleased assignments are one-cell placeholders. They are replaced by problem notebooks only when the corresponding assignment is released.
+
+1. [Assignment_1](Assignment_1/)
+2. [Assignment_2](Assignment_2/)
+3. [Assignment_3](Assignment_3/)
+4. [Assignment_4](Assignment_4/)
