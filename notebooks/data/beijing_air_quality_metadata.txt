@@ -1,0 +1,51 @@
+Dataset: Beijing Multi-Site Air Quality (Aotizhongxin course excerpt)
+
+Local data file: data/beijing_air_quality_aotizhongxin_20130309_20130311.csv
+Original repository: UCI Machine Learning Repository.
+Creator and citation: Song Chen (2017), Beijing Multi-Site Air Quality,
+UCI Machine Learning Repository, https://doi.org/10.24432/C5RK5G.
+Original data providers: air-pollution measurements are from the Beijing
+Municipal Environmental Monitoring Center. Matched meteorological measurements
+are from the China Meteorological Administration.
+Licence: Creative Commons Attribution 4.0 International (CC BY 4.0).
+Credit requirement: cite Chen and the UCI dataset when sharing the data, an
+analysis, or an adapted copy.
+
+Original download:
+https://archive.ics.uci.edu/static/public/501/beijing%2Bmulti%2Bsite%2Bair%2Bquality%2Bdata.zip
+Archive file: PRSA2017_Data_20130301-20170228.zip
+Source file:
+PRSA_Data_20130301-20170228/PRSA_Data_Aotizhongxin_20130301-20170228.csv
+Downloaded outer-archive SHA-256:
+b04da438b2f331ac0ffd45aebdfec0d20d2367feb5f6948c4b1f7ce1191e33c4
+Source station-file SHA-256:
+a94fbcfc71708b6ffdc033360163d91efb7f675e496f6b5860929aa96b96351b
+Local excerpt SHA-256:
+78b852b7178a697919ab114f8c3ffeb14227b66027e635acd1d94161df421ef6
+
+Extraction rule: retain the source header and every source row whose No value
+is from 193 through 264, inclusive. Preserve all 18 columns and source order.
+This gives 72 consecutive hourly records from Aotizhongxin, beginning at
+2013-03-09 00:00 and ending at 2013-03-11 23:00. No row was cleaned, imputed,
+reordered, or otherwise changed for the local extract.
+
+Schema and units: No is the source row number. The fields year, month, day,
+and hour identify the recorded hour. PM2.5, PM10, SO2, NO2, CO, and O3 are
+pollutant concentrations in micrograms per cubic metre. TEMP and DEWP are in
+degrees Celsius, PRES is in hPa, RAIN is in mm, wd is wind direction, WSPM is
+wind speed in metres per second, and station is the monitoring-site name.
+
+Missing-value convention: the literal text NA means that a measurement is
+missing. Missingness is not a zero measurement and is not by itself an invalid
+row. This local excerpt contains exactly one missing value, in PM10 at source
+row No 205.
+
+Fitness limitation: this is a three-day consecutive excerpt from one station,
+not a random sample of Beijing, China, or later years. Adjacent hourly records
+may be dependent. Weather, emissions, instruments, and monitoring practice may
+change over time. The excerpt cannot by itself support a citywide, causal, or
+current-air-quality claim.
+
+Integrity action: retain this metadata record, the citation and licence, the
+station and extraction rule, the source hashes, and a report of missing-value
+handling with any result derived from the local extract.

@@ -1,0 +1,31 @@
+Dataset: Optical Recognition of Handwritten Digits (course copy)
+
+Local file: data/digits.csv
+Course copy: the 1,797-example test-set copy distributed with
+scikit-learn's load_digits dataset.
+Original provider: UCI Machine Learning Repository.
+Creators: E. Alpaydin and C. Kaynak.
+Citation: Alpaydin, E. and Kaynak, C. (1998), Optical Recognition of
+Handwritten Digits, UCI Machine Learning Repository,
+https://doi.org/10.24432/C50P49.
+Licence: Creative Commons Attribution 4.0 International (CC BY 4.0).
+Credit requirement: cite the creators and UCI dataset when sharing an
+analysis or adapted copy.
+
+Rows and columns: 1,797 rows; 64 feature columns and one target column.
+Feature meaning: each row represents an 8 by 8 normalized bitmap. A feature
+is the number of active pixels in one 4 by 4 block of the original image.
+Feature range: integer values from 0 through 16.
+Target: the written digit, an integer from 0 through 9.
+Missing values: none are documented.
+
+Collection scope: the original UCI data were obtained from handwritten digits
+on preprinted forms. The scikit-learn copy used here contains about 180
+examples per class and is described as a copy of the UCI test set. It is not a
+representative sample of every writer, device, language, or contemporary
+digit-recognition setting.
+
+Integrity and responsible-use note: keep the citation, licence, filtering,
+split rule, random seeds, and preprocessing with any reported result. These
+are human-generated handwriting records. The course file has no writer
+identifier and must not be used to infer identity or make claims about people.

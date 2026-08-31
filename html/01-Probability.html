@@ -7325,6 +7325,7 @@ a.anchor-link {
                     processEnvironments: true
                 },
                 displayAlign: 'center',
+                messageStyle: 'none',
                 CommonHTML: {
                     linebreaks: {
                     automatic: true
@@ -7559,8 +7560,8 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight hl-python"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
 <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span>
 </pre></div>
@@ -7597,7 +7598,7 @@ $\mathbb P(A)=3/6$.</p>
 <span class="n">pmf</span> <span class="o">=</span> <span class="p">{</span><span class="n">outcome</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">6</span> <span class="k">for</span> <span class="n">outcome</span> <span class="ow">in</span> <span class="n">omega</span><span class="p">}</span>
 
 
-<span class="k">def</span> <span class="nf">event_probability</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">probability_mass</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">event_probability</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">probability_mass</span><span class="p">):</span>
     <span class="n">event</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">event</span> <span class="o">&lt;=</span> <span class="nb">set</span><span class="p">(</span><span class="n">probability_mass</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The event must be a subset of the sample space."</span><span class="p">)</span>

@@ -1,0 +1,27 @@
+Dataset: Auto MPG (course teaching extract)
+
+Local file: data/auto.csv
+Original provider: UCI Machine Learning Repository.
+Creator and citation: R. Quinlan (1993), Auto MPG, UCI Machine Learning
+Repository, https://doi.org/10.24432/C5859H.
+Licence: Creative Commons Attribution 4.0 International (CC BY 4.0).
+Credit requirement: cite Quinlan and the UCI dataset when sharing the data,
+an analysis, or an adapted copy.
+
+Original subject: city-cycle fuel consumption in miles per gallon for
+automobiles, together with vehicle attributes. The local course extract has
+398 rows and these seven columns: mpg, cylinders, displacement, horsepower,
+weight, acceleration, and model-year. It omits the UCI origin and car-name
+fields. The local file has two missing horsepower values.
+
+Transformation limitation: the repository does not preserve a complete
+record of how this seven-column teaching extract was produced from the UCI
+files. Treat the UCI dataset as the source and the local file as an adapted
+course copy, but record the local schema and missing-value count rather than
+claiming that it is byte-identical to a current UCI download.
+
+Fitness limitation: the observations concern historical model years 1970
+through 1982. Vehicle models, technology, regulation, and collection practice
+change over time, and related vehicles may not be independent. Results from
+this extract do not automatically transfer to current vehicles, every market,
+or a causal effect of a vehicle attribute.
