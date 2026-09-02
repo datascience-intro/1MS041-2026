@@ -7524,13 +7524,749 @@ a.anchor-link {
 <!-- End of mermaid configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 <main>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=caa6f123234553e270fbe601921a43cb">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cd556172fa6ca086cf8933d21364b223">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Introduction-to-Data-Science"><a href="http://datascience-intro.github.io/1MS041-2026/">Introduction to Data Science</a><a class="anchor-link" href="#Introduction-to-Data-Science">¶</a></h1><h2 id="1MS041,-2026">1MS041, 2026<a class="anchor-link" href="#1MS041,-2026">¶</a></h2><p>©2026 Raazesh Sainudiin, Benny Avelin. <a href="https://creativecommons.org/licenses/by/4.0/">Attribution 4.0 International     (CC BY 4.0)</a></p>
+<h1 id="Assignment-1-for-Course-1MS041">Assignment 1 for Course 1MS041<a class="anchor-link" href="#Assignment-1-for-Course-1MS041">¶</a></h1><p>Make sure you pass the <code># ... Test</code> cells and
+submit your solution notebook in the corresponding assignment on the course website. You can submit multiple times before the deadline and your highest score will be used.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c036dfd10fa8c4eb90f0fe8477ade8ca">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h2 id="Assignment-1,-PROBLEM-1">Assignment 1, PROBLEM 1<a class="anchor-link" href="#Assignment-1,-PROBLEM-1">¶</a></h2><p>Maximum Points = 4</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c7ff90c5798246136a5303fb49f9a3ea">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Get-to-know-the-data">Get to know the data<a class="anchor-link" href="#Get-to-know-the-data">¶</a></h2><p>The tracked files <code>data/beijing_air_quality_metadata.txt</code> and
+<code>data/beijing_air_quality_aotizhongxin_20130309_20130311.csv</code> document and
+contain a 72-hour excerpt from the open Beijing Multi-Site Air Quality
+dataset. Read the metadata file before you use the data. Everything you
+need for this problem is written there.</p>
+<p>The code cell defines an enum type for each categorical field. Fill in
+<code>source_record</code> using members of these types. For example, a provider is
+written as <code>Provider.UCI_REPOSITORY</code>.</p>
+<ul>
+<li><code>provider</code>: choose a member of <code>Provider</code>;</li>
+<li><code>license</code>: choose a member of <code>License</code>;</li>
+<li><code>pm_unit</code>: choose a member of <code>PMUnit</code>;</li>
+<li><code>missing_value</code>: choose a member of <code>MissingValueMeaning</code>;</li>
+<li><code>station</code>, <code>start</code>, and <code>end</code>: copy the station and ISO date-times from
+the metadata;</li>
+<li><code>limitations</code>: select at least two distinct members of <code>Limitation</code>; and</li>
+<li><code>things_to_keep</code>: select at least two distinct members of <code>ItemToKeep</code>.</li>
+</ul>
+<p>Store <code>limitations</code> and <code>things_to_keep</code> as sets. Store <code>station</code>, <code>start</code>,
+and <code>end</code> as strings. Do not modify the enum definitions.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cbbe355072f5ba3da4109f88cbf8f9ba">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Provider</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">BEIJING_ENVIRONMENTAL_MONITORING_CENTER</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">CHINA_METEOROLOGICAL_ADMINISTRATION</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">UCI_REPOSITORY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">License</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">CC_BY_4_0</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">CC0</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">ALL_RIGHTS_RESERVED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PMUnit</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">MICROGRAMS_PER_CUBIC_METRE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">MILLIGRAMS_PER_CUBIC_METRE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">PARTS_PER_MILLION</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MissingValueMeaning</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">NA_MEANS_MISSING_NOT_ZERO</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">NA_MEANS_ZERO</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">NA_ROW_MUST_BE_REJECTED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Limitation</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">ONE_STATION</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">THREE_CONSECUTIVE_DAYS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">HOURLY_DEPENDENCE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">HISTORICAL_NOT_CURRENT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">NOT_CITYWIDE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ItemToKeep</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">CITATION_AND_LICENSE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">EXTRACTION_RULE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">FILE_HASHES</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SOURCE_METADATA</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">MISSING_VALUE_HANDLING</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+<span class="n">source_record</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"provider"</span><span class="p">:</span> <span class="n">XXX</span><span class="p">,</span>
+    <span class="s2">"license"</span><span class="p">:</span> <span class="n">XXX</span><span class="p">,</span>
+    <span class="s2">"pm_unit"</span><span class="p">:</span> <span class="n">XXX</span><span class="p">,</span>
+    <span class="s2">"missing_value"</span><span class="p">:</span> <span class="n">XXX</span><span class="p">,</span>
+    <span class="s2">"station"</span><span class="p">:</span> <span class="n">XXX</span><span class="p">,</span>
+    <span class="s2">"start"</span><span class="p">:</span> <span class="n">XXX</span><span class="p">,</span>
+    <span class="s2">"end"</span><span class="p">:</span> <span class="n">XXX</span><span class="p">,</span>
+    <span class="s2">"limitations"</span><span class="p">:</span> <span class="p">{</span><span class="n">XXX</span><span class="p">},</span>
+    <span class="s2">"things_to_keep"</span><span class="p">:</span> <span class="p">{</span><span class="n">XXX</span><span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c3c497130b32e16a21456a465cdb6ca4">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h4 id="Local-Test-for-Assignment-1,-PROBLEM-1">Local Test for Assignment 1, PROBLEM 1<a class="anchor-link" href="#Local-Test-for-Assignment-1,-PROBLEM-1">¶</a></h4><p>Evaluate cell below to make sure your answer is valid.                             You <strong>should not</strong> modify anything in the cell below when evaluating it to do a local test of                             your solution.
+You may need to include and evaluate code snippets from lecture notebooks in cells above to make the local test work correctly sometimes (see error messages for clues). This is meant to help you become efficient at recalling materials covered in lectures that relate to this problem. Such local tests will generally not be available in the exam.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cba609b323f5fb9fa2a9cb38511e00e5">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Set</span>
+
+<span class="n">required_source_fields</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"provider"</span><span class="p">,</span> <span class="s2">"license"</span><span class="p">,</span> <span class="s2">"pm_unit"</span><span class="p">,</span> <span class="s2">"missing_value"</span><span class="p">,</span>
+    <span class="s2">"station"</span><span class="p">,</span> <span class="s2">"start"</span><span class="p">,</span> <span class="s2">"end"</span><span class="p">,</span> <span class="s2">"limitations"</span><span class="p">,</span>
+    <span class="s2">"things_to_keep"</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source_record</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">),</span> <span class="s2">"source_record must be a mapping"</span>
+<span class="k">assert</span> <span class="n">required_source_fields</span> <span class="o">&lt;=</span> <span class="n">source_record</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s2">"A required field is missing"</span>
+<span class="n">expected_enum_types</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"provider"</span><span class="p">:</span> <span class="n">Provider</span><span class="p">,</span>
+    <span class="s2">"license"</span><span class="p">:</span> <span class="n">License</span><span class="p">,</span>
+    <span class="s2">"pm_unit"</span><span class="p">:</span> <span class="n">PMUnit</span><span class="p">,</span>
+    <span class="s2">"missing_value"</span><span class="p">:</span> <span class="n">MissingValueMeaning</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">enum_type</span> <span class="ow">in</span> <span class="n">expected_enum_types</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source_record</span><span class="p">[</span><span class="n">field</span><span class="p">],</span> <span class="n">enum_type</span><span class="p">),</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> must use </span><span class="si">{</span><span class="n">enum_type</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"station"</span><span class="p">,</span> <span class="s2">"start"</span><span class="p">,</span> <span class="s2">"end"</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source_record</span><span class="p">[</span><span class="n">field</span><span class="p">],</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">source_record</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> must be a string"</span>
+<span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">enum_type</span> <span class="ow">in</span> <span class="p">((</span><span class="s2">"limitations"</span><span class="p">,</span> <span class="n">Limitation</span><span class="p">),</span> <span class="p">(</span><span class="s2">"things_to_keep"</span><span class="p">,</span> <span class="n">ItemToKeep</span><span class="p">)):</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source_record</span><span class="p">[</span><span class="n">field</span><span class="p">],</span> <span class="n">Set</span><span class="p">),</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> must be a set"</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">source_record</span><span class="p">[</span><span class="n">field</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Select at least two </span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">'_'</span><span class="p">,</span><span class="w"> </span><span class="s1">' '</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">enum_type</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">source_record</span><span class="p">[</span><span class="n">field</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The source record is complete."</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c9f0879bfb81baa84c84f46ce66bc5c5">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h2 id="Assignment-1,-PROBLEM-2">Assignment 1, PROBLEM 2<a class="anchor-link" href="#Assignment-1,-PROBLEM-2">¶</a></h2><p>Maximum Points = 4</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c998d68dfb7fcc051f59033faf5e7da5">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Portable-loading-and-validation">Portable loading and validation<a class="anchor-link" href="#Portable-loading-and-validation">¶</a></h2><p>Implement <code>load_air_quality(path)</code> using portable Python (no shell commands).
+The argument may be a path string or a <code>pathlib.Path</code>. The function must:</p>
+<ol>
+<li>require <code>No</code>, <code>year</code>, <code>month</code>, <code>day</code>, <code>hour</code>, <code>PM2.5</code>, <code>PM10</code>, <code>TEMP</code>, <code>PRES</code>, <code>WSPM</code>, and <code>station</code>;</li>
+<li>convert the row number and date-time fields to integers and the five measurement fields to floats;</li>
+<li>retain an otherwise valid row containing literal <code>NA</code> in a measurement field, storing that field as <code>None</code>;</li>
+<li>reject a row with an invalid date-time, empty station, negative non-missing particulate concentration or wind speed, nonpositive pressure, nonfinite value, or other conversion failure;</li>
+<li>preserve source order and return <code>(records, counts)</code>.</li>
+</ol>
+<p>The return contract is:</p>
+<ul>
+<li><code>records</code> is a list. Each retained row is a dictionary-like mapping containing at
+least the eleven required fields. <code>No</code>, <code>year</code>, <code>month</code>, <code>day</code>, and
+<code>hour</code> contain integers (not Booleans); the five measurement fields
+contain floats or <code>None</code>; and <code>station</code> contains a nonempty string.</li>
+<li><code>counts</code> is a dictionary-like mapping with the keys <code>retained</code>, <code>rejected</code>, and
+<code>missing_values</code>, each containing a nonnegative integer. Count missing
+measurements only in retained rows.</li>
+</ul>
+<p>Raise <code>ValueError</code> if a required column is absent. Apply the function to
+the supplied excerpt and store its outputs as <code>air_quality_records</code> and
+<code>air_quality_counts</code>. Missingness is not a zero measurement and is not by
+itself a reason to reject a row. Do not impose additional range restrictions
+on <code>No</code> or <code>TEMP</code>.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cce736d2d819e4e1bb69d4a6ed3109cc">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_air_quality</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="c1"># Replace this body with your portable loader.</span>
+    <span class="k">pass</span>
+
+<span class="n">air_quality_records</span><span class="p">,</span> <span class="n">air_quality_counts</span> <span class="o">=</span> <span class="n">load_air_quality</span><span class="p">(</span>
+    <span class="s2">"data/beijing_air_quality_aotizhongxin_20130309_20130311.csv"</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c081c1716d529dfc98c94cd04029d338">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h4 id="Local-Test-for-Assignment-1,-PROBLEM-2">Local Test for Assignment 1, PROBLEM 2<a class="anchor-link" href="#Local-Test-for-Assignment-1,-PROBLEM-2">¶</a></h4><p>Evaluate cell below to make sure your answer is valid.                             You <strong>should not</strong> modify anything in the cell below when evaluating it to do a local test of                             your solution.
+You may need to include and evaluate code snippets from lecture notebooks in cells above to make the local test work correctly sometimes (see error messages for clues). This is meant to help you become efficient at recalling materials covered in lectures that relate to this problem. Such local tests will generally not be available in the exam.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c4f3f02cbaec7501787d0458f2a6a45a">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integral</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">assert</span> <span class="nb">callable</span><span class="p">(</span><span class="n">load_air_quality</span><span class="p">),</span> <span class="s2">"load_air_quality must be a function"</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">air_quality_records</span><span class="p">,</span> <span class="nb">list</span><span class="p">),</span> <span class="s2">"records must be a list"</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">air_quality_counts</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">),</span> <span class="s2">"counts must be a dictionary-like mapping"</span>
+<span class="n">count_fields</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"retained"</span><span class="p">,</span> <span class="s2">"rejected"</span><span class="p">,</span> <span class="s2">"missing_values"</span><span class="p">}</span>
+<span class="k">assert</span> <span class="n">count_fields</span> <span class="o">&lt;=</span> <span class="n">air_quality_counts</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
+    <span class="nb">isinstance</span><span class="p">(</span><span class="n">air_quality_counts</span><span class="p">[</span><span class="n">field</span><span class="p">],</span> <span class="n">Integral</span><span class="p">)</span>
+    <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">air_quality_counts</span><span class="p">[</span><span class="n">field</span><span class="p">],</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">))</span>
+    <span class="ow">and</span> <span class="n">air_quality_counts</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">count_fields</span>
+<span class="p">)</span>
+<span class="k">if</span> <span class="n">air_quality_records</span><span class="p">:</span>
+    <span class="n">first</span> <span class="o">=</span> <span class="n">air_quality_records</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="p">{</span><span class="s2">"No"</span><span class="p">,</span> <span class="s2">"year"</span><span class="p">,</span> <span class="s2">"month"</span><span class="p">,</span> <span class="s2">"day"</span><span class="p">,</span> <span class="s2">"hour"</span><span class="p">,</span> <span class="s2">"PM2.5"</span><span class="p">,</span> <span class="s2">"PM10"</span><span class="p">,</span> <span class="s2">"TEMP"</span><span class="p">,</span> <span class="s2">"PRES"</span><span class="p">,</span> <span class="s2">"WSPM"</span><span class="p">,</span> <span class="s2">"station"</span><span class="p">}</span> <span class="o">&lt;=</span> <span class="n">first</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"No"</span><span class="p">,</span> <span class="s2">"year"</span><span class="p">,</span> <span class="s2">"month"</span><span class="p">,</span> <span class="s2">"day"</span><span class="p">,</span> <span class="s2">"hour"</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">first</span><span class="p">[</span><span class="n">field</span><span class="p">],</span> <span class="n">Integral</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">first</span><span class="p">[</span><span class="n">field</span><span class="p">],</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"PM2.5"</span><span class="p">,</span> <span class="s2">"PM10"</span><span class="p">,</span> <span class="s2">"TEMP"</span><span class="p">,</span> <span class="s2">"PRES"</span><span class="p">,</span> <span class="s2">"WSPM"</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">first</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">first</span><span class="p">[</span><span class="n">field</span><span class="p">],</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">first</span><span class="p">[</span><span class="s2">"station"</span><span class="p">],</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">first</span><span class="p">[</span><span class="s2">"station"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The loader returns the required record and count structures."</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c1382d1aadb41f39ce101b3871a97ba9">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h2 id="Assignment-1,-PROBLEM-3">Assignment 1, PROBLEM 3<a class="anchor-link" href="#Assignment-1,-PROBLEM-3">¶</a></h2><p>Maximum Points = 6</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c87fd95d03142e19349db6a8f5087937">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="A-finite-monitoring-model">A finite monitoring model<a class="anchor-link" href="#A-finite-monitoring-model">¶</a></h2><p>For a future monitored hour, let $E=1$ mean that a fixed reference procedure labels the hour as a high-pollution event and $E=0$ mean that it does not. A separate automated rule produces a warning score $S$ in $\{0,1,2\}$. This fully specified hypothetical law is not estimated from the 72-row excerpt:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:right">$S=0$</th>
+<th style="text-align:right">$S=1$</th>
+<th style="text-align:right">$S=2$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$E=0$</td>
+<td style="text-align:right">0.42</td>
+<td style="text-align:right">0.18</td>
+<td style="text-align:right">0.05</td>
+</tr>
+<tr>
+<td>$E=1$</td>
+<td style="text-align:right">0.06</td>
+<td style="text-align:right">0.14</td>
+<td style="text-align:right">0.15</td>
+</tr>
+</tbody>
+</table>
+<p>A threshold $t$ raises an alarm when $S \geq t$. Implement
+<code>monitoring_metrics(joint)</code> for any numeric array-like $2$ by $3$
+joint-probability table, with rows ordered as $E=0,1$ and columns ordered
+as $S=0,1,2$. A valid entry is finite and lies in $[0,1]$. Treat the entries
+as summing to one when their absolute sum error is at most $10^{-12}$.
+Raise <code>ValueError</code> for a table of the wrong shape, with an invalid entry,
+whose entries do not sum to one within this tolerance, or for which any
+requested conditional probability is undefined. In particular, the
+denominators $P(E=0)$, $P(E=1)$, and $P(S \geq 1)$ must be positive.</p>
+<p>Return a dictionary with the following exact keys. Every probability and
+independence-product value is a float, and the independence result is a Boolean:</p>
+<ul>
+<li><code>alarm_probability_t1</code>: $P(S \geq 1)$;</li>
+<li><code>event_given_alarm_t1</code>: $P(E=1 \mid S \geq 1)$;</li>
+<li><code>event_and_score2</code>: $P(E=1, S=2)$;</li>
+<li><code>independence_product</code>: $P(E=1)P(S=2)$. The events $\{E=1\}$ and
+$\{S=2\}$ are independent exactly when this product equals
+<code>event_and_score2</code>;</li>
+<li><code>independent_event_score2</code>, a Boolean result of that comparison, treating
+the two sides as equal when their absolute difference is at most $10^{-12}$; and</li>
+<li><code>false_alarm_t1</code> and <code>false_alarm_t2</code>: $P(S \geq t \mid E=0)$ for
+$t=1,2$;</li>
+<li><code>miss_t1</code> and <code>miss_t2</code>: $P(S&lt;t \mid E=1)$ for $t=1,2$.</li>
+</ul>
+<p>Apply the function to the displayed law as <code>monitoring_answer</code>. Record the
+threshold tradeoff in <code>threshold_effect</code>, a dictionary with exactly the
+keys <code>false_alarm</code> and <code>miss</code>. Choose each value from the <code>ThresholdEffect</code>
+enum defined in the code cell. Do not modify the enum definition.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c1252042d32e02ffab5ebbb0a2f09d52">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ThresholdEffect</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">DECREASES</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">INCREASES</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">UNCHANGED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+<span class="n">joint_law</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="mf">0.42</span><span class="p">,</span> <span class="mf">0.18</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.14</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">],</span>
+<span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">monitoring_metrics</span><span class="p">(</span><span class="n">joint</span><span class="p">):</span>
+    <span class="c1"># Return the requested probability dictionary.</span>
+    <span class="k">pass</span>
+
+<span class="n">monitoring_answer</span> <span class="o">=</span> <span class="n">monitoring_metrics</span><span class="p">(</span><span class="n">joint_law</span><span class="p">)</span>
+<span class="n">threshold_effect</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"false_alarm"</span><span class="p">:</span> <span class="n">XXX</span><span class="p">,</span>
+    <span class="s2">"miss"</span><span class="p">:</span> <span class="n">XXX</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c579dd035d2830e9b4f0d661448aa4ef">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h4 id="Local-Test-for-Assignment-1,-PROBLEM-3">Local Test for Assignment 1, PROBLEM 3<a class="anchor-link" href="#Local-Test-for-Assignment-1,-PROBLEM-3">¶</a></h4><p>Evaluate cell below to make sure your answer is valid.                             You <strong>should not</strong> modify anything in the cell below when evaluating it to do a local test of                             your solution.
+You may need to include and evaluate code snippets from lecture notebooks in cells above to make the local test work correctly sometimes (see error messages for clues). This is meant to help you become efficient at recalling materials covered in lectures that relate to this problem. Such local tests will generally not be available in the exam.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c289d31e4b17afd6b8ae185e11729dba">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">required_monitoring_fields</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"alarm_probability_t1"</span><span class="p">,</span> <span class="s2">"event_given_alarm_t1"</span><span class="p">,</span>
+    <span class="s2">"event_and_score2"</span><span class="p">,</span> <span class="s2">"independence_product"</span><span class="p">,</span>
+    <span class="s2">"independent_event_score2"</span><span class="p">,</span> <span class="s2">"false_alarm_t1"</span><span class="p">,</span>
+    <span class="s2">"false_alarm_t2"</span><span class="p">,</span> <span class="s2">"miss_t1"</span><span class="p">,</span> <span class="s2">"miss_t2"</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="k">assert</span> <span class="nb">callable</span><span class="p">(</span><span class="n">monitoring_metrics</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">monitoring_answer</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">monitoring_answer</span><span class="p">)</span> <span class="o">==</span> <span class="n">required_monitoring_fields</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">required_monitoring_fields</span> <span class="o">-</span> <span class="p">{</span><span class="s2">"independent_event_score2"</span><span class="p">}:</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">monitoring_answer</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">monitoring_answer</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">monitoring_answer</span><span class="p">[</span><span class="s2">"independent_event_score2"</span><span class="p">],</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">))</span>
+<span class="n">simple</span> <span class="o">=</span> <span class="n">monitoring_metrics</span><span class="p">([[</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]])</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">simple</span><span class="p">[</span><span class="s2">"alarm_probability_t1"</span><span class="p">],</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">simple</span><span class="p">[</span><span class="s2">"event_given_alarm_t1"</span><span class="p">],</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">bool</span><span class="p">(</span><span class="n">simple</span><span class="p">[</span><span class="s2">"independent_event_score2"</span><span class="p">])</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">threshold_effect</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">set</span><span class="p">(</span><span class="n">threshold_effect</span><span class="p">)</span> <span class="o">==</span> <span class="p">{</span><span class="s2">"false_alarm"</span><span class="p">,</span> <span class="s2">"miss"</span><span class="p">}</span>
+<span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">ThresholdEffect</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">threshold_effect</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The function has the requested interface and passes a simple finite-law check."</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c78437307614060cd9a72743afdaf92a">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h2 id="Assignment-1,-PROBLEM-4">Assignment 1, PROBLEM 4<a class="anchor-link" href="#Assignment-1,-PROBLEM-4">¶</a></h2><p>Maximum Points = 6</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cdf28fb7bacb17bab16105fa2eb302f1">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="A-Hoeffding-interval-and-a-simulation-study">A Hoeffding interval and a simulation study<a class="anchor-link" href="#A-Hoeffding-interval-and-a-simulation-study">¶</a></h2><p>Let $X_1,\ldots,X_n$ be independent Bernoulli variables with the same unknown mean $p$, and let $\widehat p_n$ be their average. Hoeffding's inequality gives</p>
+<p>$$P(|\widehat p_n-p| \geq r) \leq 2\exp(-2nr^2).$$</p>
+<p>Solve $2\exp(-2nr^2)=\delta$ for $r$. Then implement:</p>
+<ul>
+<li><code>hoeffding_radius(n, delta)</code>, returning the radius as a float;</li>
+<li><code>hoeffding_interval(sample, delta)</code>, returning the interval clipped to
+$[0,1]$ as the two-float tuple <code>(lower, upper)</code>; and</li>
+<li><code>coverage_experiment(sample_sizes, p, delta, repetitions, seed)</code>.</li>
+</ul>
+<p>Here $n$ and <code>repetitions</code> must be positive integers (not Booleans). The
+parameters $\delta$ and $p$ must be finite real numbers satisfying
+$0&lt;\delta&lt;1$ and $0\leq p\leq1$. A sample must be a nonempty,
+one-dimensional Bernoulli sequence containing only zero and one. Raise
+<code>ValueError</code> when one of these requirements fails. The <code>sample_sizes</code>
+argument must be a nonempty iterable of distinct positive integers.</p>
+<p>In the experiment, create one generator with <code>numpy.random.default_rng(seed)</code>.
+For each sample size in the supplied order, make one call
+<code>generator.binomial(1, p, size=(repetitions, n))</code>. Return a dictionary
+whose integer keys are the supplied sample sizes. Each value is a dictionary
+with exactly these entries:</p>
+<ul>
+<li><code>covered</code>: the integer number of repetitions satisfying
+$|\widehat p_n-p|\leq r$;</li>
+<li><code>repetitions</code>: the integer repetition count; and</li>
+<li><code>coverage</code>, <code>mcse</code>, and <code>radius</code>: floats.</li>
+</ul>
+<p>Use</p>
+<p>$$\mathrm{MCSE}=\sqrt{\widehat q(1-\widehat q)/R}$$</p>
+<p>for simulated coverage $\widehat q$ and $R$ repetitions. Run the experiment for sample sizes 25, 100, and 400 with $p=0.35$, $\delta=0.05$, 4000 repetitions, and seed 2026, storing the result in <code>simulation_summary</code>. Do not assert that an empirical coverage must exceed 0.95.</p>
+<p>The code cell defines a separate enum type for each interpretation field.
+Record the interpretation in the dictionary <code>coverage_claims</code> as follows:</p>
+<ul>
+<li><code>theorem_coverage</code>: choose a member of <code>TheoremCoverage</code>;</li>
+<li><code>assumptions</code>: store a set containing the decisive members of
+<code>CoverageAssumption</code>;</li>
+<li><code>simulation_frequency</code>: choose a member of <code>SimulationFrequency</code>; and</li>
+<li><code>mcse_measures</code>: choose a member of <code>MCSEMeasure</code>.</li>
+</ul>
+<p>The dictionary must contain exactly the four displayed keys. Do not modify
+the enum definitions.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c96f9c32e6e03b2422294644a18db843">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TheoremCoverage</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">AT_LEAST_1_MINUS_DELTA</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">EXACTLY_1_MINUS_DELTA</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">NO_FINITE_SAMPLE_GUARANTEE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CoverageAssumption</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">INDEPENDENT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">BOUNDED_0_1</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">NORMAL_DATA</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SIMULATED_COVERAGE_ABOVE_TARGET</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SimulationFrequency</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">RANDOM_ESTIMATE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">THEOREM_GUARANTEE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MCSEMeasure</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">MONTE_CARLO_ERROR</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">HOEFFDING_RADIUS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">STANDARD_ERROR_OF_ONE_DATASET</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">hoeffding_radius</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">delta</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">hoeffding_interval</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">delta</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">coverage_experiment</span><span class="p">(</span><span class="n">sample_sizes</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">repetitions</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="n">simulation_summary</span> <span class="o">=</span> <span class="n">coverage_experiment</span><span class="p">(</span>
+    <span class="n">sample_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">400</span><span class="p">),</span>
+    <span class="n">p</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span>
+    <span class="n">delta</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">repetitions</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">2026</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">coverage_claims</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"theorem_coverage"</span><span class="p">:</span> <span class="n">XXX</span><span class="p">,</span>
+    <span class="s2">"assumptions"</span><span class="p">:</span> <span class="p">{</span><span class="n">XXX</span><span class="p">},</span>
+    <span class="s2">"simulation_frequency"</span><span class="p">:</span> <span class="n">XXX</span><span class="p">,</span>
+    <span class="s2">"mcse_measures"</span><span class="p">:</span> <span class="n">XXX</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c171659b1f37c2281cf7365628eaa6b4">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h4 id="Local-Test-for-Assignment-1,-PROBLEM-4">Local Test for Assignment 1, PROBLEM 4<a class="anchor-link" href="#Local-Test-for-Assignment-1,-PROBLEM-4">¶</a></h4><p>Evaluate cell below to make sure your answer is valid.                             You <strong>should not</strong> modify anything in the cell below when evaluating it to do a local test of                             your solution.
+You may need to include and evaluate code snippets from lecture notebooks in cells above to make the local test work correctly sometimes (see error messages for clues). This is meant to help you become efficient at recalling materials covered in lectures that relate to this problem. Such local tests will generally not be available in the exam.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=ce841bfa7417f06fa7d558c5f9e68df9">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Set</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integral</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">radius</span> <span class="o">=</span> <span class="n">hoeffding_radius</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">))</span>
+<span class="k">assert</span> <span class="n">math</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">20.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">40.0</span><span class="p">))</span>
+<span class="n">interval</span> <span class="o">=</span> <span class="n">hoeffding_interval</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="mf">0.20</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">interval</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+<span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">))</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">interval</span><span class="p">)</span>
+<span class="n">low</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="n">interval</span>
+<span class="k">assert</span> <span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">low</span> <span class="o">&lt;=</span> <span class="n">high</span> <span class="o">&lt;=</span> <span class="mf">1.0</span>
+<span class="k">assert</span> <span class="n">math</span><span class="o">.</span><span class="n">isclose</span><span class="p">((</span><span class="n">low</span> <span class="o">+</span> <span class="n">high</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">simulation_summary</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">simulation_summary</span><span class="p">)</span> <span class="o">==</span> <span class="p">{</span><span class="mi">25</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">400</span><span class="p">}</span>
+<span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
+    <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">Integral</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">simulation_summary</span>
+<span class="p">)</span>
+<span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">simulation_summary</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">record</span><span class="p">)</span> <span class="o">==</span> <span class="p">{</span><span class="s2">"covered"</span><span class="p">,</span> <span class="s2">"repetitions"</span><span class="p">,</span> <span class="s2">"coverage"</span><span class="p">,</span> <span class="s2">"mcse"</span><span class="p">,</span> <span class="s2">"radius"</span><span class="p">}</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">],</span> <span class="n">Integral</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">],</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"covered"</span><span class="p">,</span> <span class="s2">"repetitions"</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">],</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"coverage"</span><span class="p">,</span> <span class="s2">"mcse"</span><span class="p">,</span> <span class="s2">"radius"</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">record</span><span class="p">[</span><span class="s2">"covered"</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">record</span><span class="p">[</span><span class="s2">"repetitions"</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">record</span><span class="p">[</span><span class="s2">"coverage"</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">1.0</span>
+    <span class="k">assert</span> <span class="n">record</span><span class="p">[</span><span class="s2">"mcse"</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.0</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">coverage_claims</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">coverage_claims</span><span class="p">)</span> <span class="o">==</span> <span class="p">{</span><span class="s2">"theorem_coverage"</span><span class="p">,</span> <span class="s2">"assumptions"</span><span class="p">,</span> <span class="s2">"simulation_frequency"</span><span class="p">,</span> <span class="s2">"mcse_measures"</span><span class="p">}</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">coverage_claims</span><span class="p">[</span><span class="s2">"assumptions"</span><span class="p">],</span> <span class="n">Set</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">coverage_claims</span><span class="p">[</span><span class="s2">"theorem_coverage"</span><span class="p">],</span> <span class="n">TheoremCoverage</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
+    <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">CoverageAssumption</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">coverage_claims</span><span class="p">[</span><span class="s2">"assumptions"</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">coverage_claims</span><span class="p">[</span><span class="s2">"simulation_frequency"</span><span class="p">],</span> <span class="n">SimulationFrequency</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">coverage_claims</span><span class="p">[</span><span class="s2">"mcse_measures"</span><span class="p">],</span> <span class="n">MCSEMeasure</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The radius, clipped interval, and simulation summary pass interface checks."</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c5a2b66853a4045997ad64c809fa174c">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h2 id="Assignment-1,-PROBLEM-5">Assignment 1, PROBLEM 5<a class="anchor-link" href="#Assignment-1,-PROBLEM-5">¶</a></h2><p>Maximum Points = 4</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cf5d1d6c832ce3721821d6bccf75c6f4">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Assumption-diagnosis">Assumption diagnosis<a class="anchor-link" href="#Assumption-diagnosis">¶</a></h2><p>For each scenario, choose a member of the <code>Diagnosis</code> enum and identify
+the decisive assumptions using members of the <code>DiagnosticCode</code> enum. Use
+each scenario's requested conclusion; a theorem with the wrong type of
+conclusion is not a substitute.</p>
+<ul>
+<li><code>bounded_iid</code>: $X_1,\ldots,X_n$ are i.i.d. delays in $[0,30]$. We want an exponential upper bound for $P(|\overline X_n-E[X_1]| \geq \epsilon)$.</li>
+<li><code>finite_variance</code>: $X_1,\ldots,X_n$ are independent with common mean $\mu$ and variance $\sigma^2&lt;\infty$, but they need not be bounded. We want a bound of order $1/(n\epsilon^2)$ for $P(|\overline X_n-\mu| \geq \epsilon)$.</li>
+<li><code>copied_indicator</code>: $X_1$ is Bernoulli$(0.2)$ and $X_i=X_1$ for every $i$. We want a Hoeffding-type bound that decays exponentially in $n$ for the sample mean.</li>
+<li><code>mean_only</code>: $X_1,\ldots,X_n$ are i.i.d. with a finite mean, but no variance or tail condition is given. We want a bound of order $1/(n\epsilon^2)$ for the sample mean.</li>
+</ul>
+<p>Store the diagnoses in the dictionary <code>diagnoses</code>. Store exactly two
+diagnostic codes per scenario as a set in the
+dictionary <code>diagnosis_assumptions</code>. Both dictionaries must have exactly the
+four scenario names as keys. Together, the theorem label and the two codes
+form the machine-graded explanation. Do not modify the enum definitions.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cb7cff364897fee3f44e9f18130a0edd">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Diagnosis</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">HOEFFDING</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">CHEBYSHEV</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">INSUFFICIENT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DiagnosticCode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">INDEPENDENT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">BOUNDED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">FINITE_VARIANCE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">DEPENDENT_COPY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">NO_N_IMPROVEMENT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">FINITE_VARIANCE_NOT_GIVEN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">TAIL_BOUND_NOT_GIVEN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+<span class="n">diagnoses</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"bounded_iid"</span><span class="p">:</span> <span class="n">XXX</span><span class="p">,</span>
+    <span class="s2">"finite_variance"</span><span class="p">:</span> <span class="n">XXX</span><span class="p">,</span>
+    <span class="s2">"copied_indicator"</span><span class="p">:</span> <span class="n">XXX</span><span class="p">,</span>
+    <span class="s2">"mean_only"</span><span class="p">:</span> <span class="n">XXX</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">diagnosis_assumptions</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"bounded_iid"</span><span class="p">:</span> <span class="p">{</span><span class="n">XXX</span><span class="p">},</span>
+    <span class="s2">"finite_variance"</span><span class="p">:</span> <span class="p">{</span><span class="n">XXX</span><span class="p">},</span>
+    <span class="s2">"copied_indicator"</span><span class="p">:</span> <span class="p">{</span><span class="n">XXX</span><span class="p">},</span>
+    <span class="s2">"mean_only"</span><span class="p">:</span> <span class="p">{</span><span class="n">XXX</span><span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c946db208ddced8fb33994b3954a4866">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h4 id="Local-Test-for-Assignment-1,-PROBLEM-5">Local Test for Assignment 1, PROBLEM 5<a class="anchor-link" href="#Local-Test-for-Assignment-1,-PROBLEM-5">¶</a></h4><p>Evaluate cell below to make sure your answer is valid.                             You <strong>should not</strong> modify anything in the cell below when evaluating it to do a local test of                             your solution.
+You may need to include and evaluate code snippets from lecture notebooks in cells above to make the local test work correctly sometimes (see error messages for clues). This is meant to help you become efficient at recalling materials covered in lectures that relate to this problem. Such local tests will generally not be available in the exam.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c89505c087ed7ae2f87f1343a2db468d">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Set</span>
+
+<span class="n">scenario_names</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"bounded_iid"</span><span class="p">,</span> <span class="s2">"finite_variance"</span><span class="p">,</span> <span class="s2">"copied_indicator"</span><span class="p">,</span> <span class="s2">"mean_only"</span><span class="p">}</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">diagnoses</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">set</span><span class="p">(</span><span class="n">diagnoses</span><span class="p">)</span> <span class="o">==</span> <span class="n">scenario_names</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">diagnosis_assumptions</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">set</span><span class="p">(</span><span class="n">diagnosis_assumptions</span><span class="p">)</span> <span class="o">==</span> <span class="n">scenario_names</span>
+<span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Diagnosis</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">diagnoses</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
+    <span class="nb">isinstance</span><span class="p">(</span><span class="n">codes</span><span class="p">,</span> <span class="n">Set</span><span class="p">)</span>
+    <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">codes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">DiagnosticCode</span><span class="p">)</span> <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">codes</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">codes</span> <span class="ow">in</span> <span class="n">diagnosis_assumptions</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"All scenarios have a diagnosis and decisive assumptions."</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>
