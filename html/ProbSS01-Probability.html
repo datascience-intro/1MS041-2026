@@ -7535,7 +7535,18 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c9d4ba8c34bfc8d89c682fbfaae0b617">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cba74555656171541f8d0e4f6247b8af">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id="Introduction-to-Data-Science"><a href="http://datascience-intro.github.io/1MS041-2026/">Introduction to Data Science</a><a class="anchor-link" href="#Introduction-to-Data-Science">¶</a></h1><h2 id="1MS041,-2026">1MS041, 2026<a class="anchor-link" href="#1MS041,-2026">¶</a></h2><p>©2026 Raazesh Sainudiin, Benny Avelin. <a href="https://creativecommons.org/licenses/by/4.0/">Attribution 4.0 International     (CC BY 4.0)</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c9cbe2178949f2cbbf8857e353402670">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7549,7 +7560,7 @@ short probability calculation and a source summary for the bundled text file.</p
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs celltag_setup" id="cell-id=c11642827e88e8bd26ca377bf62a9109">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs celltag_setup" id="cell-id=cbdd890f31a67220e423e43645e0be2e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7557,7 +7568,8 @@ short probability calculation and a source summary for the bundled text file.</p
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fractions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fraction</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hashlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">sha256</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 
@@ -7586,7 +7598,7 @@ short probability calculation and a source summary for the bundled text file.</p
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c58e9dc853936a90f884e967ffcfe0a8">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cc35bdd004ba0927acba4e796d8e98dd">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7598,7 +7610,7 @@ $\Omega=\{(i,j):i,j\in\{1,\ldots,6\}\}$, every subset is an event, and every out
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c9bfa9f54b3727ec5227fcf47a6098bb">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c5b53f7201e095483dd0e368bf28f3fb">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7606,7 +7618,7 @@ $\Omega=\{(i,j):i,j\in\{1,\ldots,6\}\}$, every subset is an event, and every out
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">omega</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">)]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">omega</span> <span class="o">=</span> <span class="p">{(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">)}</span>
 <span class="n">A</span> <span class="o">=</span> <span class="p">{(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">omega</span> <span class="k">if</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">}</span>
 <span class="n">B</span> <span class="o">=</span> <span class="p">{(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">omega</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">}</span>
 
@@ -7629,7 +7641,7 @@ $\Omega=\{(i,j):i,j\in\{1,\ldots,6\}\}$, every subset is an event, and every out
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cfcd898268ad1d55d43ac6264388d317">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ca6ea080fdc1e8fa05fdd5c678279600">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7640,7 +7652,7 @@ $\Omega=\{(i,j):i,j\in\{1,\ldots,6\}\}$, every subset is an event, and every out
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cee822583163f0455dbc883cd289cba5">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cb82c3a33c47f6936124c14216f5917e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7650,7 +7662,7 @@ $\Omega=\{(i,j):i,j\in\{1,\ldots,6\}\}$, every subset is an event, and every out
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c8f450bf7bca484fd1aa046b697d8e95">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cd924d1872dc27bc2d74d162713016f6">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7658,7 +7670,7 @@ $\Omega=\{(i,j):i,j\in\{1,\ldots,6\}\}$, every subset is an event, and every out
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">n_trials</span> <span class="o">=</span> <span class="mi">5_000</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">n_trials</span> <span class="o">=</span> <span class="mi">5_000</span>
 <span class="n">rolls</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_trials</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="n">hits</span> <span class="o">=</span> <span class="p">(</span><span class="n">rolls</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 <span class="n">running_frequency</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">hits</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_trials</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
@@ -7678,7 +7690,7 @@ $\Omega=\{(i,j):i,j\in\{1,\ldots,6\}\}$, every subset is an event, and every out
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cd56c907b4df213f8307ab27a7532a06">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cd325140636d875d22fd121a1b5f34c2">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7688,7 +7700,7 @@ $\Omega=\{(i,j):i,j\in\{1,\ldots,6\}\}$, every subset is an event, and every out
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c1c0df3e197302136669071e16c31d5c">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cc6092b646c43e363e36f0fccd566636">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7696,7 +7708,7 @@ $\Omega=\{(i,j):i,j\in\{1,\ldots,6\}\}$, every subset is an event, and every out
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">cards</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">])</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">cards</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">])</span>
 <span class="n">n_rep</span> <span class="o">=</span> <span class="mi">20_000</span>
 
 <span class="n">with_replacement</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">cards</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_rep</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -7716,7 +7728,7 @@ $\Omega=\{(i,j):i,j\in\{1,\ldots,6\}\}$, every subset is an event, and every out
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c3f20cd1d4f84ae944295488beb4610a">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cd6165a292b30d5a664bbce244598b6d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7735,7 +7747,7 @@ $\Omega=\{(i,j):i,j\in\{1,\ldots,6\}\}$, every subset is an event, and every out
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c9c7586c1efde4c6c590f9478c5e8a5a">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=ceb26c71447a5f222285fbf559643846">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7743,7 +7755,7 @@ $\Omega=\{(i,j):i,j\in\{1,\ldots,6\}\}$, every subset is an event, and every out
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">text_path</span> <span class="o">=</span> <span class="n">course_data</span><span class="p">(</span><span class="s2">"pride_and_prejudice.txt"</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">text_path</span> <span class="o">=</span> <span class="n">course_data</span><span class="p">(</span><span class="s2">"pride_and_prejudice.txt"</span><span class="p">)</span>
 <span class="n">raw_bytes</span> <span class="o">=</span> <span class="n">text_path</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
 <span class="n">text</span> <span class="o">=</span> <span class="n">raw_bytes</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8-sig"</span><span class="p">)</span>
 <span class="n">words</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">"[A-Za-z]+(?:'[A-Za-z]+)?"</span><span class="p">,</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
@@ -7757,7 +7769,7 @@ $\Omega=\{(i,j):i,j\in\{1,\ldots,6\}\}$, every subset is an event, and every out
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cb33bb4e87330318a5a6213ad46814aa">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c522534aea283940bc0667ec90cd1024">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7765,7 +7777,7 @@ $\Omega=\{(i,j):i,j\in\{1,\ldots,6\}\}$, every subset is an event, and every out
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">top</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">top</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
 <span class="n">labels</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">top</span><span class="p">)</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mf">3.8</span><span class="p">))</span>
@@ -7780,7 +7792,153 @@ $\Omega=\{(i,j):i,j\in\{1,\ldots,6\}\}$, every subset is an event, and every out
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c6c575496679e0ac7d7be24cc7affd5b">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c6f3aa0f8db5310fd27fa915dd54dd4e">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="5.-Urn-model">5. Urn model<a class="anchor-link" href="#5.-Urn-model">¶</a></h2><p>An urn contains two red balls and six black balls. Label the red balls 1 and 2 and the black balls 3 through 8. We draw three balls sequentially, uniformly, and without replacement.</p>
+<p>An outcome must record the order of the draws. Thus $(1,3,5)$ and $(3,1,5)$ are different outcomes. The outcome space is</p>
+<p>$$\Omega_{\mathrm{urn}}=\{(i,j,k):i,j,k\in\{1,\ldots,8\}\text{ are distinct}\}.$$</p>
+<p>There are $8\cdot7\cdot6=336$ outcomes. Each has probability $1/336$ because every available ball is equally likely at each draw. Define</p>
+<ul>
+<li>$A$: at least one of the three balls is red;</li>
+<li>$B$: exactly one of the three balls is red;</li>
+<li>$C$: the second ball is black.</li>
+</ul>
+<p>Before running the next cell, decide whether $A$ and $B$ can be independent. Notice the set relation between them.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c05235cd4f8b7b938000b818b8717c10">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Ball labels make individual balls distinguishable even when their colours agree.</span>
+<span class="n">red</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">}</span>
+<span class="n">black</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">}</span>
+
+<span class="c1"># Ordered triples preserve which ball was drawn first, second, and third.</span>
+<span class="n">urn_omega</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">second</span><span class="p">,</span> <span class="n">third</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">first</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">second</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">third</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">({</span><span class="n">first</span><span class="p">,</span> <span class="n">second</span><span class="p">,</span> <span class="n">third</span><span class="p">})</span> <span class="o">==</span> <span class="mi">3</span>
+<span class="p">}</span>
+
+<span class="c1"># Count red labels in an outcome; this makes all three event definitions easy to read.</span>
+<span class="n">number_of_red</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">outcome</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">red</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">outcome</span><span class="p">))</span>
+<span class="n">A_urn</span> <span class="o">=</span> <span class="p">{</span><span class="n">outcome</span> <span class="k">for</span> <span class="n">outcome</span> <span class="ow">in</span> <span class="n">urn_omega</span> <span class="k">if</span> <span class="n">number_of_red</span><span class="p">(</span><span class="n">outcome</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">}</span>
+<span class="n">B_urn</span> <span class="o">=</span> <span class="p">{</span><span class="n">outcome</span> <span class="k">for</span> <span class="n">outcome</span> <span class="ow">in</span> <span class="n">urn_omega</span> <span class="k">if</span> <span class="n">number_of_red</span><span class="p">(</span><span class="n">outcome</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">}</span>
+<span class="n">C_urn</span> <span class="o">=</span> <span class="p">{</span><span class="n">outcome</span> <span class="k">for</span> <span class="n">outcome</span> <span class="ow">in</span> <span class="n">urn_omega</span> <span class="k">if</span> <span class="n">outcome</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">black</span><span class="p">}</span>
+
+<span class="c1"># Uniform outcomes let us compute probabilities by counting. Fraction keeps them exact.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">urn_probability</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Fraction</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">event</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">urn_omega</span><span class="p">))</span>
+
+<span class="n">P_A_urn</span> <span class="o">=</span> <span class="n">urn_probability</span><span class="p">(</span><span class="n">A_urn</span><span class="p">)</span>
+<span class="n">P_B_urn</span> <span class="o">=</span> <span class="n">urn_probability</span><span class="p">(</span><span class="n">B_urn</span><span class="p">)</span>
+<span class="n">P_A_and_B_urn</span> <span class="o">=</span> <span class="n">urn_probability</span><span class="p">(</span><span class="n">A_urn</span> <span class="o">&amp;</span> <span class="n">B_urn</span><span class="p">)</span>
+<span class="n">P_B_given_A_urn</span> <span class="o">=</span> <span class="n">P_A_and_B_urn</span> <span class="o">/</span> <span class="n">P_A_urn</span>
+<span class="n">P_C_urn</span> <span class="o">=</span> <span class="n">urn_probability</span><span class="p">(</span><span class="n">C_urn</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Number of ordered outcomes: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">urn_omega</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"P(A) = </span><span class="si">{</span><span class="n">P_A_urn</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">P_A_urn</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"P(B) = </span><span class="si">{</span><span class="n">P_B_urn</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">P_B_urn</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"P(A intersection B) = </span><span class="si">{</span><span class="n">P_A_and_B_urn</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"P(B given A) = </span><span class="si">{</span><span class="n">P_B_given_A_urn</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">P_B_given_A_urn</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"P(C) = </span><span class="si">{</span><span class="n">P_C_urn</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">P_C_urn</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Are A and B independent? </span><span class="si">{</span><span class="n">P_A_and_B_urn</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">P_A_urn</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">P_B_urn</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">urn_omega</span><span class="p">)</span> <span class="o">==</span> <span class="mi">8</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">*</span> <span class="mi">6</span>
+<span class="k">assert</span> <span class="n">B_urn</span> <span class="o">&lt;=</span> <span class="n">A_urn</span>
+<span class="k">assert</span> <span class="n">P_C_urn</span> <span class="o">==</span> <span class="n">Fraction</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c4a86d38dc334dcc92c5dc0ed32328ef">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>The counts agree with direct calculations. For example,</p>
+<p>$$P(A)=1-P(\text{all three are black})
+=1-\frac{6}{8}\frac{5}{7}\frac{4}{6}
+=\frac{9}{14}.$$</p>
+<p>For $B$, choose the red ball, choose two of the six black balls, and arrange the three chosen balls in draw order. This gives</p>
+<p>$$P(B)=\frac{2\binom{6}{2}3!}{8\cdot7\cdot6}=\frac{15}{28}.$$</p>
+<p>Since $B\subseteq A$, we have $A\cap B=B$. Therefore $P(A\cap B)=15/28$, whereas $P(A)P(B)=135/392$. The events are not independent. Equivalently, $P(B\mid A)=5/6\ne P(B)$. Finally, every draw position is marginally uniform over the eight balls, so $P(C)=6/8=3/4$.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cbf810d5c0fc30747aa9de7a8e603c5d">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Why-an-unordered-outcome-space-loses-information">Why an unordered outcome space loses information<a class="anchor-link" href="#Why-an-unordered-outcome-space-loses-information">¶</a></h3><p>Suppose instead that we store each selection as an increasing triple. This smaller space records which three balls were selected, but it discards their draw order. It is still adequate for $A$ and $B$ because these events depend only on the colours selected. Each increasing triple represents exactly $3!=6$ ordered outcomes, so uniform probability on the increasing triples gives the same probabilities for such order-insensitive events.</p>
+<p>It cannot represent $C$. In an increasing triple, index 1 is the ball with the middle label, not the ball drawn second. The calculation called <code>middle_label_is_black</code> below is therefore not a calculation of $P(C)$.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c45c6e6f700ebed71b7028cdc2f5b79b">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Increasing triples represent unordered selections of three balls.</span>
+<span class="n">unordered_omega</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">(</span><span class="n">smallest</span><span class="p">,</span> <span class="n">middle</span><span class="p">,</span> <span class="n">largest</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">smallest</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">middle</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">smallest</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">largest</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">middle</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">A_unordered</span> <span class="o">=</span> <span class="p">{</span><span class="n">outcome</span> <span class="k">for</span> <span class="n">outcome</span> <span class="ow">in</span> <span class="n">unordered_omega</span> <span class="k">if</span> <span class="n">number_of_red</span><span class="p">(</span><span class="n">outcome</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">}</span>
+<span class="n">B_unordered</span> <span class="o">=</span> <span class="p">{</span><span class="n">outcome</span> <span class="k">for</span> <span class="n">outcome</span> <span class="ow">in</span> <span class="n">unordered_omega</span> <span class="k">if</span> <span class="n">number_of_red</span><span class="p">(</span><span class="n">outcome</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">}</span>
+
+<span class="c1"># This is only an attempted translation of C. The middle entry is not a draw position.</span>
+<span class="n">middle_label_is_black</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">outcome</span> <span class="k">for</span> <span class="n">outcome</span> <span class="ow">in</span> <span class="n">unordered_omega</span> <span class="k">if</span> <span class="n">outcome</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">black</span>
+<span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">unordered_probability</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Fraction</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">event</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">unordered_omega</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Number of unordered selections: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">unordered_omega</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"P(A) from unordered selections = </span><span class="si">{</span><span class="n">unordered_probability</span><span class="p">(</span><span class="n">A_unordered</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"P(B) from unordered selections = </span><span class="si">{</span><span class="n">unordered_probability</span><span class="p">(</span><span class="n">B_unordered</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="s2">"P(middle label is black), which is not P(C), ="</span><span class="p">,</span>
+    <span class="n">unordered_probability</span><span class="p">(</span><span class="n">middle_label_is_black</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">unordered_omega</span><span class="p">)</span> <span class="o">==</span> <span class="mi">56</span>  <span class="c1"># This is C(8, 3).</span>
+<span class="k">assert</span> <span class="n">unordered_probability</span><span class="p">(</span><span class="n">A_unordered</span><span class="p">)</span> <span class="o">==</span> <span class="n">P_A_urn</span>
+<span class="k">assert</span> <span class="n">unordered_probability</span><span class="p">(</span><span class="n">B_unordered</span><span class="p">)</span> <span class="o">==</span> <span class="n">P_B_urn</span>
+<span class="k">assert</span> <span class="n">unordered_probability</span><span class="p">(</span><span class="n">middle_label_is_black</span><span class="p">)</span> <span class="o">!=</span> <span class="n">P_C_urn</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c6b62386ec703988fb0384249b959df6">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7788,9 +7946,12 @@ $\Omega=\{(i,j):i,j\in\{1,\ldots,6\}\}$, every subset is an event, and every out
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput celltag_exercise" data-mime-type="text/markdown">
 <h2 id="Recap">Recap<a class="anchor-link" href="#Recap">¶</a></h2><p>Before you finish, make sure you can:</p>
 <ol>
-<li>Recompute the exact probability of $A$ by listing the possible sums.</li>
-<li>Explain in one sentence why the simulation is evidence about the model rather than the definition of $P(A)$.</li>
-<li>Add one limitation to the source summary. In particular, state why the token counts do not estimate a universal English-language distribution.</li>
+<li>Recompute the exact dice probability of $A$ by listing the possible sums.</li>
+<li>Explain why a simulation provides evidence about a probability model but does not define the model probability.</li>
+<li>Explain how sampling with or without replacement changes dependence.</li>
+<li>State why the urn model uses ordered triples, and explain why unordered triples work for $A$ and $B$ but not for the position-dependent event $C$.</li>
+<li>Check independence either by comparing $P(A\cap B)$ with $P(A)P(B)$ or, when the conditioning probability is positive, by comparing $P(B\mid A)$ with $P(B)$.</li>
+<li>Add one limitation to the source summary and state why the token counts do not estimate a universal English-language distribution.</li>
 <li>Record the checksum with your analysis so that another person can identify the same source file.</li>
 </ol>
 </div>
