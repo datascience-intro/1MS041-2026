@@ -33,6 +33,7 @@ These notebooks are numbered according to the lecture they accompany and will be
 These notebooks are numbered according to the problem-solving session they accompany.
 
 ProbSS01. [ProbSS01-Probability](ProbSS01-Probability/)
+Exercise_session01. [Exercise_session01](Exercise_session01/)
 ProbSS02. [ProbSS02-Data](ProbSS02-Data/)
 ProbSS03. [ProbSS03-Uncertainty](ProbSS03-Uncertainty/)
 ProbSS04. [ProbSS04-Estimation](ProbSS04-Estimation/)

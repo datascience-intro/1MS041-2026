@@ -92,45 +92,51 @@
       "assignment_release_state": null
     },
     {
-      "filename": "ProbSS02-Data.ipynb",
+      "filename": "Exercise_session01.ipynb",
       "section": "probss",
       "order": 2,
       "assignment_release_state": null
     },
     {
-      "filename": "ProbSS03-Uncertainty.ipynb",
+      "filename": "ProbSS02-Data.ipynb",
       "section": "probss",
       "order": 3,
       "assignment_release_state": null
     },
     {
-      "filename": "ProbSS04-Estimation.ipynb",
+      "filename": "ProbSS03-Uncertainty.ipynb",
       "section": "probss",
       "order": 4,
       "assignment_release_state": null
     },
     {
-      "filename": "ProbSS05-Markov.ipynb",
+      "filename": "ProbSS04-Estimation.ipynb",
       "section": "probss",
       "order": 5,
       "assignment_release_state": null
     },
     {
-      "filename": "ProbSS06-Classification.ipynb",
+      "filename": "ProbSS05-Markov.ipynb",
       "section": "probss",
       "order": 6,
       "assignment_release_state": null
     },
     {
-      "filename": "ProbSS07-Workflow.ipynb",
+      "filename": "ProbSS06-Classification.ipynb",
       "section": "probss",
       "order": 7,
       "assignment_release_state": null
     },
     {
-      "filename": "ProbSS08-Dimension_Clustering.ipynb",
+      "filename": "ProbSS07-Workflow.ipynb",
       "section": "probss",
       "order": 8,
+      "assignment_release_state": null
+    },
+    {
+      "filename": "ProbSS08-Dimension_Clustering.ipynb",
+      "section": "probss",
+      "order": 9,
       "assignment_release_state": null
     },
     {
