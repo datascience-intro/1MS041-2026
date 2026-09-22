@@ -7556,7 +7556,7 @@ probability.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">binom</span>
 
@@ -7567,7 +7567,130 @@ probability.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cfcd9396413cf5a43a65415d4620537b">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c184a2a93d0222dd75dfafcae163e1fa">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Opening-experiment:-where-do-running-means-finish?">Opening experiment: where do running means finish?<a class="anchor-link" href="#Opening-experiment:-where-do-running-means-finish?">¶</a></h2><p>Fix a target sample size $N$ and an error tolerance $\varepsilon&gt;0$
+<strong>before</strong> generating any observations. In each repetition, generate $N$
+independent Bernoulli observations with success probability $p$. Repetitions
+are independent as well. The true mean is $\mu=p$, and after $k$ observations
+the running mean is</p>
+<p>$$
+\overline X_k=\frac{1}{k}\sum_{i=1}^k X_i,\qquad k=1,\ldots,N.
+$$</p>
+<p>Each curve below is one repetition. The horizontal band is the fixed interval
+$[\mu-\varepsilon,\mu+\varepsilon]$. The vertical line marks our target $N$.
+A curve is colored by whether its <strong>final</strong> mean $\overline X_N$ lies inside
+or outside the band; circles and crosses mark those final values.
+A curve may leave and re-enter the band before reaching $N$.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c3c6b8e903afa881011c3f487b503c89">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Choose these settings before generating the samples.</span>
+<span class="n">target_n</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">repetitions</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="n">p</span> <span class="o">=</span> <span class="mf">0.50</span>
+<span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">seed</span> <span class="o">=</span> <span class="mi">404</span>
+
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_n</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">target_n</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">repetitions</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">repetitions</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+<span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">p</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">epsilon</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+<span class="c1"># A separate generator makes this experiment reproducible on each rerun.</span>
+<span class="n">running_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">running_rng</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">repetitions</span><span class="p">,</span> <span class="n">target_n</span><span class="p">))</span>
+<span class="n">sample_counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">target_n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">running_means</span> <span class="o">=</span> <span class="n">samples</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">sample_counts</span>
+<span class="n">true_mean</span> <span class="o">=</span> <span class="n">p</span>
+<span class="n">lower</span><span class="p">,</span> <span class="n">upper</span> <span class="o">=</span> <span class="n">true_mean</span> <span class="o">-</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">true_mean</span> <span class="o">+</span> <span class="n">epsilon</span>
+<span class="n">final_means</span> <span class="o">=</span> <span class="n">running_means</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="c1"># Include endpoints of the closed band, allowing for floating-point rounding.</span>
+<span class="n">on_boundary</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">final_means</span><span class="p">,</span> <span class="n">lower</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span>
+    <span class="n">final_means</span><span class="p">,</span> <span class="n">upper</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span>
+<span class="p">)</span>
+<span class="n">inside</span> <span class="o">=</span> <span class="p">((</span><span class="n">final_means</span> <span class="o">&gt;=</span> <span class="n">lower</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">final_means</span> <span class="o">&lt;=</span> <span class="n">upper</span><span class="p">))</span> <span class="o">|</span> <span class="n">on_boundary</span>
+<span class="n">n_inside</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">inside</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="n">n_outside</span> <span class="o">=</span> <span class="n">repetitions</span> <span class="o">-</span> <span class="n">n_inside</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">),</span> <span class="n">layout</span><span class="o">=</span><span class="s2">"constrained"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhspan</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#dcebd9"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">"Fixed $\mu\pm\varepsilon$ band"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#56834a"</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">upper</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#56834a"</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">true_mean</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#222222"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">rf</span><span class="s2">"True mean $\mu=</span><span class="si">{</span><span class="n">true_mean</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2">$"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">target_n</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#555555"</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">":"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">mask</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">marker</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">inside</span><span class="p">,</span> <span class="s2">"#0072B2"</span><span class="p">,</span> <span class="s2">"o"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Inside at N: </span><span class="si">{</span><span class="n">n_inside</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">repetitions</span><span class="si">}</span><span class="s2">"</span><span class="p">),</span>
+    <span class="p">(</span><span class="o">~</span><span class="n">inside</span><span class="p">,</span> <span class="s2">"#D55E00"</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Outside at N: </span><span class="si">{</span><span class="n">n_outside</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">repetitions</span><span class="si">}</span><span class="s2">"</span><span class="p">),</span>
+<span class="p">):</span>
+    <span class="k">for</span> <span class="n">curve</span> <span class="ow">in</span> <span class="n">running_means</span><span class="p">[</span><span class="n">mask</span><span class="p">]:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sample_counts</span><span class="p">,</span> <span class="n">curve</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">mask</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="n">target_n</span><span class="p">),</span> <span class="n">final_means</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+    <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">target_n</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span> <span class="n">target_n</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.03</span> <span class="o">*</span> <span class="n">target_n</span><span class="p">)),</span>
+    <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="o">-</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">lower</span> <span class="o">-</span> <span class="mf">0.02</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="mf">1.02</span><span class="p">,</span> <span class="n">upper</span> <span class="o">+</span> <span class="mf">0.02</span><span class="p">)),</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="sa">r</span><span class="s2">"Number of observations $k$ (target $N$ fixed in advance)"</span><span class="p">,</span>
+    <span class="n">ylabel</span><span class="o">=</span><span class="sa">r</span><span class="s2">"Running mean $\overline</span><span class="si">{X}</span><span class="s2">_k$"</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="sa">rf</span><span class="s2">"</span><span class="si">{</span><span class="n">repetitions</span><span class="si">}</span><span class="s2"> independent runs: target $N=</span><span class="si">{</span><span class="n">target_n</span><span class="si">}</span><span class="s2">$, tolerance $\varepsilon=</span><span class="si">{</span><span class="n">epsilon</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2">$"</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">target_n</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span> <span class="n">target_n</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">ticks</span><span class="p">,</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="se">\n</span><span class="s2">(target N)"</span> <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="n">target_n</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ticks</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"upper right"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">"x"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"At the fixed target N = </span><span class="si">{</span><span class="n">target_n</span><span class="si">}</span><span class="s2">:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Inside [</span><span class="si">{</span><span class="n">lower</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">upper</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">]: </span><span class="si">{</span><span class="n">n_inside</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">repetitions</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Outside: </span><span class="si">{</span><span class="n">n_outside</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">repetitions</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">n_outside</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">repetitions</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c5a2e689b086b7064418ef138dd3d9c3">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="What-does-the-experiment-measure?">What does the experiment measure?<a class="anchor-link" href="#What-does-the-experiment-measure?">¶</a></h3><p>The outside fraction estimates the fixed-sample probability
+$\mathbb P(|\overline X_N-\mu|&gt;\varepsilon)$. Values exactly on a boundary
+count as inside the closed band. The inequalities below bound the event with
+$\geq\varepsilon$, which also gives an upper bound for this outside event.</p>
+<ul>
+<li>Increase $N$ while keeping $p$ and $\varepsilon$ fixed. How do the final
+means compare? A finite collection of repetitions need not improve every time.</li>
+<li>Keep $N$ fixed and reduce $\varepsilon$. How does the outside count change?</li>
+<li>Does ending inside the band imply that the curve stayed inside it earlier?
+Does it guarantee staying inside after $N$? Neither conclusion follows.</li>
+</ul>
+<p>The band is centered at the <strong>known true mean in our simulation</strong>. It is an
+error-tolerance band, not a confidence interval calculated from data. Later
+we will center a random confidence interval at the observed sample mean.
+The concentration inequalities that follow give theoretical probability
+bounds; the simulated outside fraction is an estimate, not a guarantee.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ce105e00f7ab4c922741f481ac16ce69">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7594,7 +7717,7 @@ bound may be clipped at 1.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cf7c8177fa534794ea75925b8e828dd0">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c8a60de1f9dae4161ee34855b495de30">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7602,27 +7725,49 @@ bound may be clipped at 1.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="c1"># A finite Markov/Chebyshev calculation.</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># A finite Markov/Chebyshev calculation.</span>
 <span class="n">x_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">])</span>
 <span class="n">probabilities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">6</span><span class="p">])</span>
 <span class="n">mean_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x_values</span> <span class="o">*</span> <span class="n">probabilities</span><span class="p">)</span>
 <span class="n">variance_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">x_values</span> <span class="o">-</span> <span class="n">mean_x</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">probabilities</span><span class="p">)</span>
 
-<span class="n">exact_markov_event</span> <span class="o">=</span> <span class="n">probabilities</span><span class="p">[</span><span class="n">x_values</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-<span class="n">markov_bound</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mean_x</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">exact_chebyshev_event</span> <span class="o">=</span> <span class="n">probabilities</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x_values</span> <span class="o">-</span> <span class="n">mean_x</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-<span class="n">chebyshev_bound</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">variance_x</span> <span class="o">/</span> <span class="mi">2</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">markov_threshold</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">chebyshev_tolerance</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">exact_markov_event</span> <span class="o">=</span> <span class="n">probabilities</span><span class="p">[</span><span class="n">x_values</span> <span class="o">&gt;=</span> <span class="n">markov_threshold</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">markov_bound</span> <span class="o">=</span> <span class="n">mean_x</span> <span class="o">/</span> <span class="n">markov_threshold</span>
+<span class="n">exact_chebyshev_event</span> <span class="o">=</span> <span class="n">probabilities</span><span class="p">[</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x_values</span> <span class="o">-</span> <span class="n">mean_x</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">chebyshev_tolerance</span>
+<span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">chebyshev_bound</span> <span class="o">=</span> <span class="n">variance_x</span> <span class="o">/</span> <span class="n">chebyshev_tolerance</span><span class="o">**</span><span class="mi">2</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"E[X]=</span><span class="si">{</span><span class="n">mean_x</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, Var(X)=</span><span class="si">{</span><span class="n">variance_x</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"P(X &gt;= 2)=</span><span class="si">{</span><span class="n">exact_markov_event</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, clipped Markov bound=</span><span class="si">{</span><span class="n">markov_bound</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"P(|X-E[X]| &gt;= 2)=</span><span class="si">{</span><span class="n">exact_chebyshev_event</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, clipped Chebyshev bound=</span><span class="si">{</span><span class="n">chebyshev_bound</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"P(X &gt;= </span><span class="si">{</span><span class="n">markov_threshold</span><span class="si">}</span><span class="s2">)=</span><span class="si">{</span><span class="n">exact_markov_event</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, Markov bound=</span><span class="si">{</span><span class="n">markov_bound</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"P(|X-E[X]| &gt;= </span><span class="si">{</span><span class="n">chebyshev_tolerance</span><span class="si">}</span><span class="s2">)=</span><span class="si">{</span><span class="n">exact_chebyshev_event</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, Chebyshev bound=</span><span class="si">{</span><span class="n">chebyshev_bound</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c6dbbc0156107b687f87890c8e68fbfa">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c6026489e7619b840fe10eb5d7190a89">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Both bounds are informative: Markov gives $1/6\leq1/4$, and Chebyshev
+gives $1/6\leq1/2$. They bound different events, so this is not a general
+ranking of the two inequalities.</p>
+<p><strong>Follow-up: when is a bound uninformative?</strong> Change both thresholds to 2.
+Then $\mathbb P(X\geq2)=1/2$, while Markov gives 1. Also,
+$\mathbb P(|X-2|\geq2)=2/3$, while Chebyshev gives 2, which we clip to 1.
+Both bounds remain valid, but neither improves on the fact that a
+probability is at most 1.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c07af935cfb3d566d5ca20e90c590362">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7637,7 +7782,7 @@ be computed from the binomial PMF because $n\overline X_n\sim \mathrm{Binomial}(
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c9628d23879946da01f36b20a9d045e9">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c7b3ff0ff52d5c183c1a5c4aebc3ea64">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7645,7 +7790,7 @@ be computed from the binomial PMF because $n\overline X_n\sim \mathrm{Binomial}(
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="mf">0.35</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="mf">0.35</span>
 <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.10</span>
 <span class="n">sample_sizes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">500</span><span class="p">])</span>
 
@@ -7672,7 +7817,7 @@ be computed from the binomial PMF because $n\overline X_n\sim \mathrm{Binomial}(
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c7490bc47eeec7ccf4a036a97f5a2ca3">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c05d7c721f76287fdcc23e8f686b0f42">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7690,7 +7835,7 @@ the fixed parameter after one interval has been observed.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cddb330a09a5e273fab49e255674b95f">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c06c76a402b38f658074c0520b20872b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7698,7 +7843,7 @@ the fixed parameter after one interval has been observed.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="mf">0.30</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="mf">0.30</span>
 <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.05</span>
 <span class="n">repetitions</span> <span class="o">=</span> <span class="mi">5000</span>
 
@@ -7716,23 +7861,69 @@ the fixed parameter after one interval has been observed.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c29a63a9acb7bf2587d5e2b3c0a7c819">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c0841df4532dc794b5eb088cdde777b1">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="What-changes-when-the-sample-size-is-random?">What changes when the sample size is random?<a class="anchor-link" href="#What-changes-when-the-sample-size-is-random?">¶</a></h2><p>Suppose an i.i.d. sample is filtered by a fixed event $A$, with
-$\mathbb P(A)&gt;0$, and success within the retained group has conditional
-probability $q$. The retained count $N_A$ is random. Conditional on
-$N_A=k\geq1$, the retained success indicators are i.i.d.
-$\mathrm{Bernoulli}(q)$, so the half-width uses $k$, not the original
-sample size. When $N_A=0$, the notes define the conservative interval
+<h2 id="What-changes-when-the-sample-size-is-random?">What changes when the sample size is random?<a class="anchor-link" href="#What-changes-when-the-sample-size-is-random?">¶</a></h2><h3 id="Purchase-probability-among-mobile-users">Purchase probability among mobile users<a class="anchor-link" href="#Purchase-probability-among-mobile-users">¶</a></h3><p>Return to our website example. For each visit, let $M$ indicate mobile use
+and $Y$ indicate a purchase. Assume that the visit pairs $(M_i,Y_i)$ are
+i.i.d. with the following joint law:</p>
+<table>
+<thead>
+<tr>
+<th>Joint probability</th>
+<th style="text-align:right">$Y=0$: no purchase</th>
+<th style="text-align:right">$Y=1$: purchase</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$M=0$: other device</td>
+<td style="text-align:right">0.63</td>
+<td style="text-align:right">0.07</td>
+</tr>
+<tr>
+<td>$M=1$: mobile</td>
+<td style="text-align:right">0.24</td>
+<td style="text-align:right">0.06</td>
+</tr>
+</tbody>
+</table>
+<p>We fix the mobile filter before looking at the data. Its retention probability
+is $p_M=\mathbb P(M=1)=0.30$. Our target is the conditional purchase probability</p>
+<p>$$
+q=\mathbb P(Y=1\mid M=1)=\frac{0.06}{0.30}=0.20.
+$$</p>
+<p>The table specifies the simulation model, so we know $q$ here. In an actual
+analysis it would be unknown. Device and purchase are dependent within a
+visit; independence is assumed <strong>between visits</strong>. If the same users make
+repeated dependent visits, this i.i.d. model would need reconsideration.</p>
+<p>Observe a fixed total of $n=1000$ visits. Define the random retained count
+and mobile purchase count by</p>
+<p>$$
+N_M=\sum_{i=1}^{1000}M_i,\qquad
+S_M=\sum_{i=1}^{1000}M_iY_i.
+$$</p>
+<p>Then $N_M\sim\mathrm{Binomial}(1000,0.30)$ and $\mathbb E[N_M]=300$.
+When $N_M&gt;0$, estimate $q$ by $\widehat q=S_M/N_M$.
+Dividing by 1000 instead estimates the probability of a visit being both
+mobile and a purchase, which is 0.06 in this model.</p>
+<h3 id="A-concrete-observed-sample">A concrete observed sample<a class="anchor-link" href="#A-concrete-observed-sample">¶</a></h3><p>Suppose we observe 320 mobile visits and 64 mobile purchases, as in the
+lecture example. The estimate is $64/320=0.20$. Conditional on $N_M=k&gt;0$,
+the retained purchase indicators are i.i.d. Bernoulli with parameter $q$.
+The Hoeffding half-width therefore uses the <strong>observed count $k$</strong>:</p>
+<p>$$
+\delta(k,\alpha)=\sqrt{\frac{\log(2/\alpha)}{2k}}.
+$$</p>
+<p>Use $\alpha=0.05$ for coverage at least 95%. The helper below also handles
+an empty retained sample: the estimate is undefined and the interval is
 $[0,1]$.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=caca5818ab265d24c0ff93b40e955c94">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cbca1e02aabbe8f11b98567ae92b3572">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7740,31 +7931,150 @@ $[0,1]$.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">original_n</span> <span class="o">=</span> <span class="mi">80</span>
-<span class="n">p_a</span> <span class="o">=</span> <span class="mf">0.05</span>
-<span class="n">q</span> <span class="o">=</span> <span class="mf">0.40</span>
-<span class="n">in_a</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">original_n</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">p_a</span>
-<span class="n">success</span> <span class="o">=</span> <span class="n">in_a</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">original_n</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">q</span><span class="p">)</span>
-<span class="n">n_a</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">in_a</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">mobile_purchase_interval</span><span class="p">(</span><span class="n">mobile_purchases</span><span class="p">,</span> <span class="n">mobile_count</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Hoeffding interval conditional on the count retained by a fixed filter."""</span>
+    <span class="k">if</span> <span class="n">mobile_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">estimate</span> <span class="o">=</span> <span class="n">mobile_purchases</span> <span class="o">/</span> <span class="n">mobile_count</span>
+    <span class="n">half_width</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">mobile_count</span><span class="p">))</span>
+    <span class="n">interval</span> <span class="o">=</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">estimate</span> <span class="o">-</span> <span class="n">half_width</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">estimate</span> <span class="o">+</span> <span class="n">half_width</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">estimate</span><span class="p">,</span> <span class="n">interval</span>
 
-<span class="k">if</span> <span class="n">n_a</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="n">interval</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-    <span class="n">estimate</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">estimate</span> <span class="o">=</span> <span class="n">success</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">n_a</span>
-    <span class="n">delta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n_a</span><span class="p">))</span>
-    <span class="n">interval</span> <span class="o">=</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">estimate</span> <span class="o">-</span> <span class="n">delta</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">estimate</span> <span class="o">+</span> <span class="n">delta</span><span class="p">))</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">"retained N_A ="</span><span class="p">,</span> <span class="n">n_a</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"conditional-probability estimate ="</span><span class="p">,</span> <span class="n">estimate</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"95% Hoeffding interval ="</span><span class="p">,</span> <span class="n">interval</span><span class="p">)</span>
+<span class="n">mobile_alpha</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">observed_mobile_count</span> <span class="o">=</span> <span class="mi">320</span>
+<span class="n">observed_mobile_purchases</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">estimate</span><span class="p">,</span> <span class="n">interval</span> <span class="o">=</span> <span class="n">mobile_purchase_interval</span><span class="p">(</span>
+    <span class="n">observed_mobile_purchases</span><span class="p">,</span> <span class="n">observed_mobile_count</span><span class="p">,</span> <span class="n">mobile_alpha</span>
+<span class="p">)</span>
+<span class="n">half_width</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="n">mobile_alpha</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">observed_mobile_count</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Mobile purchase estimate: </span><span class="si">{</span><span class="n">observed_mobile_purchases</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">observed_mobile_count</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">estimate</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"95% half-width using the retained count: </span><span class="si">{</span><span class="n">half_width</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"95% Hoeffding interval for q: [</span><span class="si">{</span><span class="n">interval</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">interval</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">]"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"No mobile visits:"</span><span class="p">,</span> <span class="n">mobile_purchase_interval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">mobile_alpha</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cf2083a62d45cc85274a494740a2b8fb">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=caa552a24e5bb02c03f78fd4e11550e8">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>The interval is approximately $[0.1241,0.2759]$. It is conservative but
+informative: it is much narrower than $[0,1]$. Using all 1000 visits in the
+half-width would give about 0.04295 instead of 0.07592 and would not be
+justified for this subgroup estimate. Replacing the observed count 320 by
+its expectation 300 is not the conditional calculation either.</p>
+<h3 id="Why-does-coverage-survive-a-random-retained-count?">Why does coverage survive a random retained count?<a class="anchor-link" href="#Why-does-coverage-survive-a-random-retained-count?">¶</a></h3><p>Let $I_k$ denote the interval computed from the retained data when $N_M=k$.
+For every $k\geq1$ with $\mathbb P(N_M=k)&gt;0$, the conditional i.i.d. law and
+Hoeffding give</p>
+<p>$$
+\mathbb P(q\notin I_k\mid N_M=k)\leq\alpha.
+$$</p>
+<p>At $k=0$, set $I_0=[0,1]$, so failure is impossible. The events
+$\{N_M=k\}$, $k=0,\ldots,1000$, are disjoint and cover the sample space.
+Averaging the conditional failure probabilities gives by the Tower property</p>
+<p>$$
+\mathbb P(q\notin I_{N_M})
+=\sum_{k=1}^{1000}\mathbb P(q\notin I_k\mid N_M=k)\mathbb P(N_M=k)
+\leq\alpha\mathbb P(N_M&gt;0)\leq\alpha.
+$$</p>
+<p>All these conditioning events have positive probability in our model.
+The mobile filter must be fixed in advance for this argument. Choosing the
+subgroup with the highest observed purchase rate is a different procedure.</p>
+<h3 id="Repeat-the-complete-experiment">Repeat the complete experiment<a class="anchor-link" href="#Repeat-the-complete-experiment">¶</a></h3><p>Generate 20 independent data sets, each containing 1000 visits from the
+joint table. Each data set has its own mobile count, estimate, and interval.
+The plot labels each interval with its retained count. The vertical line
+marks the true $q=0.20$ for checking coverage in the simulation.</p>
+<p>Change <code>total_visits</code> to compare the available information with larger or
+smaller samples. With very few retained visits the interval can cover all
+of $[0,1]$; that reflects limited information about the conditional rate.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c7f7dd7c54cc606c716bd998617a28cc">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">total_visits</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">mobile_repetitions</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">mobile_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">40403</span><span class="p">)</span>
+<span class="n">true_q</span> <span class="o">=</span> <span class="mf">0.20</span>
+
+<span class="c1"># Codes 0, 1, 2, 3 correspond to (M,Y) = (0,0), (0,1), (1,0), (1,1).</span>
+<span class="n">visit_codes</span> <span class="o">=</span> <span class="n">mobile_rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span>
+    <span class="mi">4</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">mobile_repetitions</span><span class="p">,</span> <span class="n">total_visits</span><span class="p">),</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mf">0.63</span><span class="p">,</span> <span class="mf">0.07</span><span class="p">,</span> <span class="mf">0.24</span><span class="p">,</span> <span class="mf">0.06</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">mobile_counts</span> <span class="o">=</span> <span class="p">(</span><span class="n">visit_codes</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">mobile_purchase_counts</span> <span class="o">=</span> <span class="p">(</span><span class="n">visit_codes</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">mobile_purchase_interval</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">mobile_alpha</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">mobile_purchase_counts</span><span class="p">,</span> <span class="n">mobile_counts</span><span class="p">)</span>
+<span class="p">]</span>
+<span class="n">intervals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">])</span>
+<span class="n">covers</span> <span class="o">=</span> <span class="p">(</span><span class="n">intervals</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">true_q</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">true_q</span> <span class="o">&lt;=</span> <span class="n">intervals</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">layout</span><span class="o">=</span><span class="s2">"constrained"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="p">((</span><span class="n">estimate</span><span class="p">,</span> <span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">)),</span> <span class="n">covered</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">covers</span><span class="p">),</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="s2">"#0072B2"</span> <span class="k">if</span> <span class="n">covered</span> <span class="k">else</span> <span class="s2">"#D55E00"</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">],</span> <span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">estimate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">estimate</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="s2">"o"</span> <span class="k">if</span> <span class="n">covered</span> <span class="k">else</span> <span class="s2">"x"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">true_q</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#222222"</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">rf</span><span class="s2">"True $q=</span><span class="si">{</span><span class="n">true_q</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">$"</span><span class="p">)</span>
+<span class="c1"># Legend entries also explain a category when no interval falls in it.</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="s2">"o-"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#0072B2"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Covers q"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="s2">"x-"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#D55E00"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Misses q"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">mobile_repetitions</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">[</span><span class="sa">f</span><span class="s2">"Run </span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">: N_M=</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mobile_counts</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">)],</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="s2">"Mobile purchase probability q"</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">"95% Hoeffding intervals after filtering </span><span class="si">{</span><span class="n">total_visits</span><span class="si">}</span><span class="s2"> visits per run"</span><span class="p">,</span>
+    <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">intervals</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.02</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">intervals</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.02</span><span class="p">)),</span>
+    <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="n">mobile_repetitions</span> <span class="o">+</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">"x"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"upper center"</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.10</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Expected mobile count: </span><span class="si">{</span><span class="n">total_visits</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.30</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Observed mobile counts: </span><span class="si">{</span><span class="n">mobile_counts</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">mobile_counts</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Intervals covering q: </span><span class="si">{</span><span class="n">covers</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">mobile_repetitions</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Mean interval width: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">intervals</span><span class="p">,</span><span class="w"> </span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cbe4c321cc7fefa423fa034cdafa7ba9">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><strong>Things to think about:</strong></p>
+<ol>
+<li>Why do the intervals have different widths even though every run observes
+the same total number of visits?</li>
+<li>Why does the estimate vary around 0.20 rather than 0.06 or 0.13?</li>
+<li>Must exactly 19 of these 20 intervals cover $q$?</li>
+<li>Does individual 95% coverage guarantee that all 20 intervals cover
+simultaneously with probability at least 95%?</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c43f7cd2b13bf5be1d99061964238e93">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
