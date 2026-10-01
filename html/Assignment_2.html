@@ -7524,13 +7524,424 @@ a.anchor-link {
 <!-- End of mermaid configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 <main>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=caa6f123234553e270fbe601921a43cb">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c4b45a1f6c3dcfdf55bc77f75ef923bd">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Introduction-to-Data-Science"><a href="http://datascience-intro.github.io/1MS041-2026/">Introduction to Data Science</a><a class="anchor-link" href="#Introduction-to-Data-Science">¶</a></h1><h2 id="1MS041,-2026">1MS041, 2026<a class="anchor-link" href="#1MS041,-2026">¶</a></h2><p>©2026 Raazesh Sainudiin, Benny Avelin. <a href="https://creativecommons.org/licenses/by/4.0/">Attribution 4.0 International     (CC BY 4.0)</a></p>
+<h1 id="Assignment-2-for-Course-1MS041">Assignment 2 for Course 1MS041<a class="anchor-link" href="#Assignment-2-for-Course-1MS041">¶</a></h1><p>Make sure you pass the <code># ... Test</code> cells and
+submit your solution notebook in the corresponding assignment on the course website. You can submit multiple times before the deadline and your highest score will be used.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cb74cd0882522fbb494b274ee015d9ed">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h2 id="Assignment-2,-PROBLEM-1">Assignment 2, PROBLEM 1<a class="anchor-link" href="#Assignment-2,-PROBLEM-1">¶</a></h2><p>Maximum Points = 5</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c2c75e6a726afc2dddcd5d46f7690be3">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Estimating-a-Poisson-event-rate">Estimating a Poisson event rate<a class="anchor-link" href="#Estimating-a-Poisson-event-rate">¶</a></h2><p>A monitoring system records the number of events in each of $n$ equal, non-overlapping time intervals. For this exercise, assume that $X_1,\ldots,X_n$ are IID with the Poisson distribution</p>
+<p>$$
+\mathbb{P}(X_i=k)=e^{-\lambda}\frac{\lambda^k}{k!},\qquad k=0,1,2,\ldots,
+$$</p>
+<p>where the unknown rate $\lambda\geq 0$ is the expected count in one interval. At $\lambda=0$, the distribution puts probability one on zero. Write $T=\sum_{i=1}^n X_i$ for the total observed count.</p>
+<ol>
+<li>Implement <code>poisson_rate_estimate(sample)</code>. Here, <code>sample</code> is a one-dimensional sequence (such as a Python list or NumPy array) containing the observed event counts from the intervals. Each entry must be a non-negative integer, and the sequence must contain at least one observation. The function returns the MLE $\widehat\lambda=T/n$, a single number in units of events per interval. <strong>[2 points]</strong></li>
+<li>Implement <code>poisson_estimator_properties(rate, n)</code>. Here, <code>rate</code> is the assumed true Poisson rate $\lambda$ (a non-negative number), and <code>n</code> is the number of IID intervals in each sample (a positive integer). Return the theoretical bias, standard error, and mean squared error of $\widehat\lambda$, in that order. <strong>[2 points]</strong></li>
+<li>In the code cell, <code>count_sample</code> is the observed count sequence and <code>reference_rate</code> is the assumed true rate used for the theoretical properties and error calculation. Set <code>count_rate_hat</code> to the estimate from <code>count_sample</code>; set <code>count_bias</code>, <code>count_standard_error</code>, and <code>count_mse</code> using <code>reference_rate</code> and the sample size. Set <code>count_observed_error</code> to the absolute difference between the estimate and <code>reference_rate</code>. This is the error in this one realized sample; <code>count_standard_error</code> describes variation over repeated IID samples. <strong>[1 point]</strong></li>
+</ol>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cf6a3484a12b6ef58a7952fe661a3668">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Reject an empty or non-one-dimensional sample, or any count that is not</span>
+<span class="c1"># a finite non-negative integer, with ValueError or TypeError.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">poisson_rate_estimate</span><span class="p">(</span><span class="n">sample</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Return the Poisson rate MLE from a one-dimensional count sample."""</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">poisson_estimator_properties</span><span class="p">(</span><span class="n">rate</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Return (bias, standard_error, mse) for the Poisson sample mean."""</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<span class="n">count_sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">reference_rate</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="n">count_rate_hat</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">count_bias</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">count_standard_error</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">count_mse</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">count_observed_error</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c6d4563111cb0ecf50e5cf5c9c2a4f3b">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h4 id="Local-Test-for-Assignment-2,-PROBLEM-1">Local Test for Assignment 2, PROBLEM 1<a class="anchor-link" href="#Local-Test-for-Assignment-2,-PROBLEM-1">¶</a></h4><p>Evaluate cell below to make sure your answer is valid.                             You <strong>should not</strong> modify anything in the cell below when evaluating it to do a local test of                             your solution.
+You may need to include and evaluate code snippets from lecture notebooks in cells above to make the local test work correctly sometimes (see error messages for clues). This is meant to help you become efficient at recalling materials covered in lectures that relate to this problem. Such local tests will generally not be available in the exam.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cb3cda7e5c6fde5d478bbd1e0950653a">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">poisson_rate_estimate</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]),</span> <span class="mf">1.5</span><span class="p">)</span>
+<span class="n">bias</span><span class="p">,</span> <span class="n">standard_error</span><span class="p">,</span> <span class="n">mse</span> <span class="o">=</span> <span class="n">poisson_estimator_properties</span><span class="p">(</span><span class="mf">4.0</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">bias</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">standard_error</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">mse</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">count_observed_error</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">poisson_rate_estimate</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+    <span class="k">pass</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">"negative counts must be rejected"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The estimator and property functions pass the public examples."</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cde379c8688c56b0a1d2207090928040">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h2 id="Assignment-2,-PROBLEM-2">Assignment 2, PROBLEM 2<a class="anchor-link" href="#Assignment-2,-PROBLEM-2">¶</a></h2><p>Maximum Points = 7</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cdbf89ba69516ed2093c5e56b430df18">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Stable-Normal-likelihood-optimization">Stable Normal likelihood optimization<a class="anchor-link" href="#Stable-Normal-likelihood-optimization">¶</a></h2><p>Let $X_1,\ldots,X_n$ be IID observations from $N(\mu,\sigma^2)$, where $\mu\in\mathbb{R}$ and $\sigma&gt;0$. Directly optimizing over $\sigma$ needs a positivity constraint. Instead write $\eta=\log(\sigma)$ and optimize over the unconstrained pair $(\mu,\eta)\in\mathbb{R}^2$.</p>
+<ol>
+<li>Implement <code>normal_nll_log_scale(parameters, data)</code>, where <code>parameters</code> contains $(\mu,\eta)$. Evaluate the negative log-likelihood as a sum; do not multiply densities. <strong>[3 points]</strong></li>
+<li>Implement <code>fit_normal_log_scale(data)</code>. Use <code>scipy.optimize.minimize</code> without parameter bounds and return <code>(mu_hat, sigma_hat, nll_hat)</code>, converting back with $\widehat\sigma=e^{\widehat\eta}$. Complete the fit to <code>normal_sample</code>, then check the numerical result against the analytic MLE you derive from the likelihood. <strong>[4 points]</strong></li>
+</ol>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c94cb475a1f391d28039c09b1f138a62">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">optimize</span>
+
+<span class="n">normal_sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">4.2</span><span class="p">,</span> <span class="mf">3.8</span><span class="p">,</span> <span class="mf">5.1</span><span class="p">,</span> <span class="mf">4.7</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">,</span> <span class="mf">3.9</span><span class="p">,</span> <span class="mf">4.4</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">4.6</span><span class="p">,</span> <span class="mf">5.2</span><span class="p">,</span> <span class="mf">4.1</span><span class="p">,</span> <span class="mf">4.8</span><span class="p">])</span>
+
+<span class="c1"># Include the Normal density's normalizing constant in the NLL.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">normal_nll_log_scale</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Return the Normal negative log-likelihood at (mu, log_sigma)."""</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<span class="c1"># Assume at least two distinct finite real observations for the fit.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fit_normal_log_scale</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Return (mu_hat, sigma_hat, nll_hat) from unconstrained optimization."""</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<span class="c1"># Check the fit to normal_sample against the analytic MLE. This is a</span>
+<span class="c1"># self-check; no written derivation is submitted.</span>
+<span class="n">problem2_mu_hat</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">problem2_sigma_hat</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">problem2_nll_hat</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cb32e081294d48a4da64c096fbc588f5">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h4 id="Local-Test-for-Assignment-2,-PROBLEM-2">Local Test for Assignment 2, PROBLEM 2<a class="anchor-link" href="#Local-Test-for-Assignment-2,-PROBLEM-2">¶</a></h4><p>Evaluate cell below to make sure your answer is valid.                             You <strong>should not</strong> modify anything in the cell below when evaluating it to do a local test of                             your solution.
+You may need to include and evaluate code snippets from lecture notebooks in cells above to make the local test work correctly sometimes (see error messages for clues). This is meant to help you become efficient at recalling materials covered in lectures that relate to this problem. Such local tests will generally not be available in the exam.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c541eaa1d3271e67f1c584cbf06d6166">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">public_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">])</span>
+<span class="n">expected_nll</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">normal_nll_log_scale</span><span class="p">((</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">public_data</span><span class="p">),</span> <span class="n">expected_nll</span><span class="p">)</span>
+<span class="n">public_mu</span><span class="p">,</span> <span class="n">public_sigma</span><span class="p">,</span> <span class="n">public_nll</span> <span class="o">=</span> <span class="n">fit_normal_log_scale</span><span class="p">(</span><span class="n">public_data</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">((</span><span class="n">public_mu</span><span class="p">,</span> <span class="n">public_sigma</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">atol</span><span class="o">=</span><span class="mf">2e-5</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">public_nll</span><span class="p">,</span> <span class="n">expected_nll</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">2e-7</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The log-scale likelihood and fit pass the public example."</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c1eef6a4ec75c839c769966f9838aff8">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h2 id="Assignment-2,-PROBLEM-3">Assignment 2, PROBLEM 3<a class="anchor-link" href="#Assignment-2,-PROBLEM-3">¶</a></h2><p>Maximum Points = 5</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c426bea4a1181b2e53cfdc448bcb2ab3">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="One--and-two-step-probabilities-in-a-finite-Markov-chain">One- and two-step probabilities in a finite Markov chain<a class="anchor-link" href="#One--and-two-step-probabilities-in-a-finite-Markov-chain">¶</a></h2><p>A device is inspected at equally spaced times. Its state is exactly one of <code>idle</code> ($I$), <code>checking</code> ($C$), or <code>alert</code> ($A$). The state at the next inspection depends on the current state according to the transition matrix below. In the order $(I,C,A)$,</p>
+<p>$$
+P=\begin{pmatrix}
+1/2 &amp; 1/2 &amp; 0\\
+1/3 &amp; 1/3 &amp; 1/3\\
+0 &amp; 1/4 &amp; 3/4
+\end{pmatrix}.
+$$</p>
+<p>Rows give the current state and columns give the next state. The Markov property means that, given the current state, earlier states do not change the distribution of the next state. The device starts in <code>idle</code>, so its initial distribution is $(1,0,0)$.</p>
+<ol>
+<li>Enter the distribution of the state after one inspection in <code>problem3_after_one</code>. <strong>[2 points]</strong></li>
+<li>Enter the distribution of the state after two inspections in <code>problem3_after_two</code>. Use the one-step distribution multiplied on the right by $P$. <strong>[3 points]</strong></li>
+</ol>
+<p>Enter each distribution as a length-three NumPy array in the order $(I,C,A)$.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c2efd8406098051434548b931da4ce48">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">problem3_transition</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="o">/</span><span class="mi">4</span><span class="p">],</span>
+<span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+<span class="n">problem3_after_one</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">problem3_after_two</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ceb9f0832e9e4d1fe72d16fafedb0ca7">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h4 id="Local-Test-for-Assignment-2,-PROBLEM-3">Local Test for Assignment 2, PROBLEM 3<a class="anchor-link" href="#Local-Test-for-Assignment-2,-PROBLEM-3">¶</a></h4><p>Evaluate cell below to make sure your answer is valid.                             You <strong>should not</strong> modify anything in the cell below when evaluating it to do a local test of                             your solution.
+You may need to include and evaluate code snippets from lecture notebooks in cells above to make the local test work correctly sometimes (see error messages for clues). This is meant to help you become efficient at recalling materials covered in lectures that relate to this problem. Such local tests will generally not be available in the exam.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cb26b4fe4f3ca6321f877c89a8b08c41">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">problem3_transition</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">problem3_transition</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">after_one</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">problem3_after_one</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">after_two</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">problem3_after_two</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">after_one</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">after_one</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">after_one</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="mi">1</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">after_two</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">after_two</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">after_two</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The Markov-chain distributions have valid types and probability ranges."</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cf104e5f6ef673ad1b930039f1bc8d08">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h2 id="Assignment-2,-PROBLEM-4">Assignment 2, PROBLEM 4<a class="anchor-link" href="#Assignment-2,-PROBLEM-4">¶</a></h2><p>Maximum Points = 7</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cae09169725df33285a78706800d6102">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Generating-samples-from-a-bounded-distribution">Generating samples from a bounded distribution<a class="anchor-link" href="#Generating-samples-from-a-bounded-distribution">¶</a></h2><p>The target distribution has density</p>
+<p>$$
+f(x)=2x\,\mathbf{1}_{[0,1]}(x).
+$$</p>
+<p>Its CDF on $[0,1]$ is $F(x)=x^2$. Use two methods to generate samples from this distribution: inverse-CDF sampling and accept--reject sampling. Use <code>np.random.default_rng(seed)</code> for random numbers so that repeating a call with the same seed gives the same result.</p>
+<p>For accept--reject sampling, let $g$ be the proposal density. An envelope constant $M\geq 1$ must satisfy $f(x)\leq M g(x)$ for every $x$. Here $g$ is the uniform density on $[0,1]$. See the accept--reject sampler in Lecture 8 of the lecture notes for the method and the role of $M$.</p>
+<ol>
+<li>Use inversion sampling to implement <code>triangular_inverse(uniform_values)</code>, which transforms supplied values $u\in[0,1]$ into target-distributed values. Implement <code>sample_triangular_inverse(size, seed)</code> to generate <code>size</code> independent uniform values and apply inversion sampling. Both functions should return a one-dimensional NumPy array. <strong>[1.5 points]</strong></li>
+<li>Implement <code>sample_triangular_rejection(size, seed)</code> using accept--reject sampling with a uniform proposal on $[0,1]$. Return <code>(samples, attempts)</code>, where <code>samples</code> is a one-dimensional NumPy array of <code>size</code> accepted values and <code>attempts</code> is the total number of proposals. <strong>[2 points]</strong></li>
+<li>Set <code>triangular_envelope</code> to the smallest valid value of $M$ for this target and proposal. Set <code>triangular_acceptance_probability</code> to the theoretical probability that one proposal is accepted. <strong>[1.5 points]</strong></li>
+<li>Implement <code>triangular_summary(samples)</code> to return a dictionary with these four entries: <code>n</code> (sample size), <code>mean</code> (observed sample mean), <code>target_mean</code> (theoretical mean), and <code>mean_mcse</code> (theoretical standard error of the sample mean). Derive the target mean and variance from $f$ to calculate <code>target_mean</code> and <code>mean_mcse</code>. Use <code>problem4_sample_size</code> and <code>problem4_seed</code> from the code cell to create both samples and their summaries. Set <code>problem4_empirical_acceptance</code> to the number accepted divided by the number of proposals. <strong>[2 points]</strong></li>
+</ol>
+<p>The sample mean and empirical acceptance rate will generally differ from their theoretical values.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=ca44d48e5f1a4817224e009ffb900e10">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">triangular_inverse</span><span class="p">(</span><span class="n">uniform_values</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Transform values from Uniform[0,1] with the inverse target CDF."""</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">sample_triangular_inverse</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Return `size` inverse-CDF samples using a local seeded generator."""</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">sample_triangular_rejection</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Return (samples, attempts) from uniform-proposal accept--reject."""</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">triangular_summary</span><span class="p">(</span><span class="n">samples</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Return n, empirical mean, target mean, and theoretical mean MCSE."""</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<span class="n">triangular_envelope</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">triangular_acceptance_probability</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">problem4_sample_size</span> <span class="o">=</span> <span class="mi">4000</span>
+<span class="n">problem4_seed</span> <span class="o">=</span> <span class="mi">2026</span>
+<span class="n">problem4_inverse_samples</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">problem4_rejection_samples</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">problem4_rejection_attempts</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">problem4_inverse_summary</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">problem4_rejection_summary</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">problem4_empirical_acceptance</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c4ce1a61d58daf513bf4e623bd8c6876">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h4 id="Local-Test-for-Assignment-2,-PROBLEM-4">Local Test for Assignment 2, PROBLEM 4<a class="anchor-link" href="#Local-Test-for-Assignment-2,-PROBLEM-4">¶</a></h4><p>Evaluate cell below to make sure your answer is valid.                             You <strong>should not</strong> modify anything in the cell below when evaluating it to do a local test of                             your solution.
+You may need to include and evaluate code snippets from lecture notebooks in cells above to make the local test work correctly sometimes (see error messages for clues). This is meant to help you become efficient at recalling materials covered in lectures that relate to this problem. Such local tests will generally not be available in the exam.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cbe036d98b6f29d247a23157cc33f107">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">triangular_inverse</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]),</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="n">public_inverse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">sample_triangular_inverse</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">17</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">public_inverse</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">25</span><span class="p">,)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">((</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">public_inverse</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">public_inverse</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">public_rejection</span><span class="p">,</span> <span class="n">public_attempts</span> <span class="o">=</span> <span class="n">sample_triangular_rejection</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">17</span><span class="p">)</span>
+<span class="n">public_rejection</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">public_rejection</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">public_rejection</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">25</span><span class="p">,)</span> <span class="ow">and</span> <span class="n">public_attempts</span> <span class="o">&gt;=</span> <span class="mi">25</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">((</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">public_rejection</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">public_rejection</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">))</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">public_inverse</span><span class="p">,</span> <span class="n">sample_triangular_inverse</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">17</span><span class="p">))</span>
+<span class="n">public_summary</span> <span class="o">=</span> <span class="n">triangular_summary</span><span class="p">(</span><span class="n">public_inverse</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">public_summary</span><span class="p">)</span> <span class="o">==</span> <span class="p">{</span><span class="s2">"n"</span><span class="p">,</span> <span class="s2">"mean"</span><span class="p">,</span> <span class="s2">"target_mean"</span><span class="p">,</span> <span class="s2">"mean_mcse"</span><span class="p">}</span>
+<span class="k">assert</span> <span class="n">public_summary</span><span class="p">[</span><span class="s2">"n"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">25</span> <span class="ow">and</span> <span class="n">public_summary</span><span class="p">[</span><span class="s2">"mean_mcse"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Both samplers and the summary pass the public interface checks."</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>
