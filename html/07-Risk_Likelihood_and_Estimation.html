@@ -7535,15 +7535,17 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cd60db982417b26e8ac37e60fd7c7e67">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c878ec2158aa4786ed1b0913cc699fc2">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Lecture-7:-Risk,-Likelihood,-and-Estimation">Lecture 7: Risk, Likelihood, and Estimation<a class="anchor-link" href="#Lecture-7:-Risk,-Likelihood,-and-Estimation">¶</a></h1><p>This notebook connects Chapters 3--5. A bounded loss turns population risk
-into an estimand and empirical risk into an estimator. We then estimate an
-entire distribution function and construct a simultaneous DKW band.</p>
+<h1 id="Lecture-7:-Risk,-Likelihood,-and-Estimation">Lecture 7: Risk, Likelihood, and Estimation<a class="anchor-link" href="#Lecture-7:-Risk,-Likelihood,-and-Estimation">¶</a></h1><p>This notebook follows the lecture route: estimate the risk of a fixed
+classifier, derive the log loss of a probabilistic classifier from
+Bernoulli likelihood, connect Gaussian likelihood with least squares,
+revisit consistency, and then estimate an entire distribution function
+with a simultaneous DKW band.</p>
 </div>
 </div>
 </div>
@@ -7635,118 +7637,7 @@ a separate question.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c516982fe24697ae12a3157e87db42ac">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Estimating-a-distribution-function-from-data">Estimating a distribution function from data<a class="anchor-link" href="#Estimating-a-distribution-function-from-data">¶</a></h2><p>For i.i.d. observations with unknown CDF $F$, the empirical CDF is</p>
-<p>$$
-\widehat F_n(t)=\frac1n\sum_{i=1}^n\mathbf 1_{\{X_i\leq t\}}.
-$$</p>
-<p>For each fixed $t$, it is an unbiased estimator of $F(t)$, with variance
-$F(t)(1-F(t))/n$. The Dvoretzky--Kiefer--Wolfowitz inequality makes the
-stronger simultaneous statement</p>
-<p>$$
-\mathbb P\left(\sup_t|\widehat F_n(t)-F(t)|&gt;\varepsilon\right)
-\leq 2e^{-2n\varepsilon^2}.
-$$</p>
-<p>No continuity, density, or moment assumption on $F$ is required.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c49ccfc7739fed7611233c5a45d99dce">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">150</span>
-<span class="n">sample</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
-<span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">800</span><span class="p">)</span>
-<span class="n">ecdf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sample</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">grid</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">true_cdf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">grid</span><span class="p">))</span>
-
-<span class="n">epsilon_dkw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n</span><span class="p">))</span>
-<span class="n">lower_band</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ecdf</span> <span class="o">-</span> <span class="n">epsilon_dkw</span><span class="p">)</span>
-<span class="n">upper_band</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ecdf</span> <span class="o">+</span> <span class="n">epsilon_dkw</span><span class="p">)</span>
-
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">ecdf</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s2">"post"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"ECDF"</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">true_cdf</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"black"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"true exponential CDF"</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">lower_band</span><span class="p">,</span> <span class="n">upper_band</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="s2">"post"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
-                <span class="n">label</span><span class="o">=</span><span class="s2">"95% DKW band"</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">"t"</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">"CDF"</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">1.03</span><span class="p">))</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cc86701c6a5e7a314a2c0ddf99c5f0da">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="c1"># For a continuous CDF, the exact sup distance is attained next to a sample jump.</span>
-<span class="n">ordered</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
-<span class="n">f_at_ordered</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">ordered</span><span class="p">)</span>
-<span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">d_plus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">indices</span> <span class="o">/</span> <span class="n">n</span> <span class="o">-</span> <span class="n">f_at_ordered</span><span class="p">)</span>
-<span class="n">d_minus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">f_at_ordered</span> <span class="o">-</span> <span class="p">(</span><span class="n">indices</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span>
-<span class="n">d_sup</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">d_plus</span><span class="p">,</span> <span class="n">d_minus</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"exact sup distance for this sample = </span><span class="si">{</span><span class="n">d_sup</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"DKW half-width = </span><span class="si">{</span><span class="n">epsilon_dkw</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"true CDF is inside this band everywhere?"</span><span class="p">,</span> <span class="n">d_sup</span> <span class="o">&lt;=</span> <span class="n">epsilon_dkw</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cf9eb0c2d88e28840d87fae4462f24bc">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Because the DKW upper bound tends to zero for every fixed
-$\varepsilon&gt;0$, it proves uniform consistency in probability:
-$\|\widehat F_n-F\|_\infty\to0$. This is different from checking one
-chosen value of $t$, and stronger than separately displaying several
-pointwise intervals.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ca55fe7fbe7a3a3cb79de5a01b2038e7">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Checkpoint:-empirical-risk-and-distribution-functions">Checkpoint: empirical risk and distribution functions<a class="anchor-link" href="#Checkpoint:-empirical-risk-and-distribution-functions">¶</a></h2><ol>
-<li>Change the classifier to always predict 1. Derive its population risk
-before estimating it, then compare its empirical risk with the Bayes rule.</li>
-<li>For a fixed $t$, derive the mean and variance of
-$\widehat F_n(t)$ by identifying its summands as Bernoulli variables.</li>
-<li>Repeat the DKW plot for a discrete Bernoulli distribution. Do not use the
-continuous-CDF shortcut for the exact supremum; evaluate the step functions
-directly on intervals around their jump points.</li>
-</ol>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cf2d75a2f18b21579c083cb7a9e0b097">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c90cfc44fa237c6e53a03160925383d1">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7759,7 +7650,7 @@ and connect Gaussian likelihood with linear regression.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c4bb595eac4d94a49ae1f519c7b7c494">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cf8083db45a0e8f0796d37117cebc4b0">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7779,7 +7670,7 @@ and connect Gaussian likelihood with linear regression.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cb6f14e9452c9d676021fe04eb7367c6">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cbc9c831cd91e36c9a6045b094c403f0">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7798,7 +7689,7 @@ work normally uses the log-likelihood.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c7a26f0c69356be33c1c75a1d734dec9">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c83a17a981a195916e6cdc240f072a0a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7815,7 +7706,7 @@ the boundary cases: it is 0 if all observations are 0 and 1 if all are 1.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c4220adb0c319062e79dc51520d214c9">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c6002d81b63607e40875cc83f93d3d63">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7856,7 +7747,7 @@ the boundary cases: it is 0 if all observations are 0 and 1 if all are 1.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ca7ec282335246143d8c81ab55ac0712">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cf0aa72680b5eed83f5f953e1be9ae2c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7874,7 +7765,7 @@ risk minimization for log loss in this model.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cf4cab17ae241f30669cc082829cc711">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cca747946a5a7c8a6a2aa4adb3d07d7a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7901,34 +7792,96 @@ risk minimization for log loss in this model.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c96276d85c88075146eef79b2f1333ec">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c98e9ecd0b3115a1f94fa09a389580bd">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="How-a-Gaussian-model-leads-to-least-squares">How a Gaussian model leads to least squares<a class="anchor-link" href="#How-a-Gaussian-model-leads-to-least-squares">¶</a></h2><p>Suppose the conditional model is</p>
+<h3 id="From-Bernoulli-likelihood-to-a-classifier's-log-loss">From Bernoulli likelihood to a classifier's log loss<a class="anchor-link" href="#From-Bernoulli-likelihood-to-a-classifier's-log-loss">¶</a></h3><p>Return to the finite classification model from the board. The input is
+$X\in\{a,b,c\}$, the label is $Y\in\{0,1\}$, and the true conditional
+probabilities are $\eta(a)=0.1$, $\eta(b)=0.5$, and $\eta(c)=0.8$.
+A <strong>probabilistic classifier</strong> $q:\{a,b,c\}\to(0,1)$ predicts the
+candidate probability $q(x)$ of label 1 at input $x$.</p>
+<p>For observed pairs $(x_i,y_i)$, suppose the labels are conditionally
+independent with $Y_i\mid X_i=x_i\sim\mathrm{Bernoulli}(q(x_i))$ under
+the candidate model. Holding the data fixed gives the conditional likelihood</p>
 <p>$$
-Y_i\mid X_i=x_i\sim\mathcal N(ax_i+b,\sigma^2)
+\mathcal L_n(q;x,y)
+=\prod_{i=1}^n q(x_i)^{y_i}(1-q(x_i))^{1-y_i}.
 $$</p>
-<p>independently, with a fixed $\sigma&gt;0$. The negative conditional
-log-likelihood equals</p>
+<p>For one observation, the negative log of its likelihood factor is the
+<strong>log loss</strong>. Averaging over the data gives</p>
 <p>$$
-\frac n2\log(2\pi\sigma^2)
-+\frac{1}{2\sigma^2}\sum_{i=1}^n(y_i-(ax_i+b))^2.
+L_{\log}(y,q(x))=-y\log q(x)-(1-y)\log(1-q(x)),\qquad
+\widehat R_n^{\log}(q;x,y)
+=\frac1n\sum_{i=1}^n L_{\log}(y_i,q(x_i))
+=-\frac1n\log\mathcal L_n(q;x,y).
 $$</p>
-<p>The first term is constant in $(a,b)$, so maximum likelihood and least
-squares choose the same slope and intercept. The model and independence
-assumptions are what justify the likelihood calculation.</p>
-<p>Scikit-learn estimators use a common interface: create the estimator, call
-<code>fit(X, y)</code>, and then call <code>predict(X_new)</code>. The feature matrix <code>X</code> has
-shape <code>(n_samples, n_features)</code>. Here <code>x_reg[:, None]</code> turns one length-$n$
-feature vector into an $n\times1$ matrix. After fitting, <code>intercept_</code> and
-<code>coef_</code> contain the fitted intercept and coefficient.</p>
+<p>For example, if $x=c$ and $q(c)=0.8$, the loss is $-\log(0.8)$ when
+$y=1$ and $-\log(0.2)$ when $y=0$. At a fixed input $x$, the true
+conditional expected loss for a proposed probability $u\in(0,1)$ is</p>
+<p>$$
+r_x(u)=-\eta(x)\log u-(1-\eta(x))\log(1-u),\qquad
+r_x'(u)=\frac{u-\eta(x)}{u(1-u)}.
+$$</p>
+<p>Because all three true probabilities lie in $(0,1)$, this is uniquely
+minimized by $u=\eta(x)$. Taking the more likely label then gives the
+hard 0--1 Bayes decision $h^*(x)=\mathbf 1_{\{\eta(x)&gt;1/2\}}$, with the
+tie at $b$ assigned to 0. Log loss evaluates predicted probabilities;
+0--1 loss evaluates hard decisions. If a hard 0 or 1 is used as a
+probability, an observation assigned probability zero has infinite log loss.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cabb7e6febc3bf43d751e02e1033a3c3">
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ceb2940a67c2f00f61ef820571d1c42c">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Gaussian-log-loss-reduces-to-a-conditional-problem">Gaussian log loss reduces to a conditional problem<a class="anchor-link" href="#Gaussian-log-loss-reduces-to-a-conditional-problem">¶</a></h2><p>Let the pairs $(X_i,Y_i)$ be i.i.d. Give the inputs a fixed law,
+$X_i\sim\mathrm{Uniform}([-1,1])$. For candidate slope $a$ and
+intercept $b$, suppose</p>
+<p>$$
+Y_i\mid X_i=x_i\sim\mathcal N(ax_i+b,\sigma^2),\qquad \sigma&gt;0
+\text{ fixed}.
+$$</p>
+<p>Write $\varphi_\sigma(v)=(2\pi\sigma^2)^{-1/2}
+\exp[-v^2/(2\sigma^2)]$. For an observed $x\in[-1,1]$, the candidate
+joint density is $f_{a,b}(x,y)=\tfrac12\varphi_\sigma(y-ax-b)$.
+The log loss for this pair splits into an input term and a conditional
+response term:</p>
+<p>$$
+-\log f_{a,b}(x,y)
+=\underbrace{\log 2}_{\text{input log loss}}
++\underbrace{\frac12\log(2\pi\sigma^2)
++\frac{(y-ax-b)^2}{2\sigma^2}}_{\text{conditional Gaussian log loss}}.
+$$</p>
+<p>Since the input law is fixed across $(a,b)$, its $\log 2$ contribution
+can be dropped when choosing the coefficients. For the observed sample,</p>
+<p>$$
+\widehat R_n^{\log}(a,b)
+=\log 2+\frac12\log(2\pi\sigma^2)
++\frac{1}{2\sigma^2n}\sum_{i=1}^n(y_i-ax_i-b)^2.
+$$</p>
+<p>Thus minimizing joint or conditional empirical log loss gives the same
+least-squares line when $\sigma$ is fixed. Taking expectations gives
+$R_{\log}(a,b)=\log 2+\tfrac12\log(2\pi\sigma^2)
++\mathbb E[(Y-aX-b)^2]/(2\sigma^2)$ under the true law.
+If the proposed input law depended on $(a,b)$, its log-loss term could
+change with the coefficients and could not be dropped.</p>
+<p>The code below generates inputs from this uniform law. Scikit-learn
+estimators use a common interface: create the estimator, call <code>fit(X, y)</code>,
+and then call <code>predict(X_new)</code>. The feature matrix <code>X</code> has shape
+<code>(n_samples, n_features)</code>. Here <code>x_reg[:, None]</code> turns one length-$n$
+feature vector into an $n\times1$ matrix. After fitting, <code>intercept_</code>
+and <code>coef_</code> contain the fitted intercept and coefficient.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cf9082e1cb4dbc9b43374139b2d0e490">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7945,7 +7898,7 @@ feature vector into an $n\times1$ matrix. After fitting, <code>intercept_</code>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cf9801fd93b2377f8ffbf9b870393216">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c933b44bc80c18869b1e2a79f7465c36">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7953,7 +7906,7 @@ feature vector into an $n\times1$ matrix. After fitting, <code>intercept_</code>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="c1"># Change only sigma_assumed to compare likelihoods for these fixed data.</span>
+<div class="highlight hl-python"><pre><span></span><span class="c1"># Change only sigma_assumed to compare log losses for these fixed data.</span>
 <span class="n">sigma_assumed</span> <span class="o">=</span> <span class="mf">0.40</span>
 <span class="n">X_reg</span> <span class="o">=</span> <span class="n">x_reg</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
 
@@ -7961,16 +7914,19 @@ feature vector into an $n\times1$ matrix. After fitting, <code>intercept_</code>
 <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_reg</span><span class="p">,</span> <span class="n">y_reg</span><span class="p">)</span>
 <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_reg</span><span class="p">)</span>
 <span class="n">sse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y_reg</span> <span class="o">-</span> <span class="n">prediction</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">negative_log_likelihood</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">n_reg</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">sigma_assumed</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-    <span class="o">+</span> <span class="n">sse</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma_assumed</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">mean_conditional_log_loss</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">sigma_assumed</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="o">+</span> <span class="n">sse</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma_assumed</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n_reg</span><span class="p">)</span>
 <span class="p">)</span>
+<span class="n">mean_joint_log_loss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">mean_conditional_log_loss</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"fitted intercept = </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">intercept_</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"fitted slope = </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"SSE at the fit = </span><span class="si">{</span><span class="n">sse</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"assumed sigma = </span><span class="si">{</span><span class="n">sigma_assumed</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"negative conditional log-likelihood = </span><span class="si">{</span><span class="n">negative_log_likelihood</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"mean conditional log loss = </span><span class="si">{</span><span class="n">mean_conditional_log_loss</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"mean joint log loss = </span><span class="si">{</span><span class="n">mean_joint_log_loss</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"input contribution = </span><span class="si">{</span><span class="n">mean_joint_log_loss</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mean_conditional_log_loss</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="n">plot_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
@@ -7986,7 +7942,7 @@ feature vector into an $n\times1$ matrix. After fitting, <code>intercept_</code>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c64574694555109121aa6b2762489c4f">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c73a5febb0805f38f3098993d6b1b262">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7998,7 +7954,7 @@ The plot is one reproducible realization of that theorem, not its proof.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c773df7ca225f6f61d048d3bccd89162">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c38cd981b40f773ccd94ff0fab8aa197">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8021,22 +7977,203 @@ The plot is one reproducible realization of that theorem, not its proof.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c5d2072d722b7bead6a077da615afe25">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c867f7478adc40642b64686836672f56">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Recap">Recap<a class="anchor-link" href="#Recap">¶</a></h2><ol>
+<h2 id="Checkpoint:-likelihood-and-regression">Checkpoint: likelihood and regression<a class="anchor-link" href="#Checkpoint:-likelihood-and-regression">¶</a></h2><ol>
 <li>For the sample $(0,0,0,0)$, evaluate the Bernoulli likelihood at
 $\theta=0$, $1/2$, and 1. Explain the boundary MLE without
 differentiating.</li>
 <li>Differentiate $R_p(\theta)$ on $(0,1)$ and verify its unique
 minimizer when $0&lt;p&lt;1$.</li>
-<li>Change <code>sigma_assumed</code> in the Gaussian likelihood cell while holding the
-generated data fixed.
-Explain why the least-squares slope and intercept do not change when
-$\sigma$ is fixed during their optimization.</li>
+<li>Why does the uniform input law add exactly $\log 2$ to the mean
+joint log loss? Explain why this term does not change the fitted
+slope and intercept. Then change <code>sigma_assumed</code> while holding the
+generated data fixed and explain why the least-squares fit stays put.</li>
+<li>At $x=c$, compare the log loss when $q(c)=0.8$ and the observed
+label is 1 with the log loss when the observed label is 0.
+Explain why the hard Bayes label 1 is a different prediction.</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cabc13d2e525fe1e3ccb8e250150ac15">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Estimating-a-distribution-function-from-data">Estimating a distribution function from data<a class="anchor-link" href="#Estimating-a-distribution-function-from-data">¶</a></h2><p>For i.i.d. observations with unknown CDF $F$, the empirical CDF is</p>
+<p>$$
+\widehat F_n(t)=\frac1n\sum_{i=1}^n\mathbf 1_{\{X_i\leq t\}}.
+$$</p>
+<p>For each fixed $t$, it is an unbiased estimator of $F(t)$, with variance
+$F(t)(1-F(t))/n$. The Dvoretzky--Kiefer--Wolfowitz inequality makes the
+stronger simultaneous statement</p>
+<p>$$
+\mathbb P\left(\sup_t|\widehat F_n(t)-F(t)|&gt;\varepsilon\right)
+\leq 2e^{-2n\varepsilon^2}.
+$$</p>
+<p>No continuity, density, or moment assumption on $F$ is required.</p>
+<p>The true $F$ appears in the plot only because this is a simulation. The
+DKW band itself is computed from the sample and the chosen $\alpha$.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c11ffc557bc6c9ef9a07ed02f1e2a417">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Repeating-the-experiment-gives-different-ECDFs">Repeating the experiment gives different ECDFs<a class="anchor-link" href="#Repeating-the-experiment-gives-different-ECDFs">¶</a></h2><p>Keep the distribution $F$ fixed. For each sample size below, draw six
+<strong>independent data sets</strong> from one exponential distribution with rate 1.
+Each data set produces a different ECDF. The black curve is the same true
+$F(t)=1-e^{-t}$ for $t\geq0$ (and $F(t)=0$ for $t&lt;0$) in both panels.
+We know $F$ here only because this is a simulation.</p>
+<p>Compare the spread of the six curves when $n=20$ with their spread when
+$n=150$. A larger sample usually gives a closer ECDF, but this plot alone
+does not prove convergence or a coverage guarantee.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c5f81f191985369b0973746cc3534369">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-python"><pre><span></span><span class="n">rng_many_ecdfs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">710</span><span class="p">)</span>
+<span class="n">t_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mi">800</span><span class="p">)</span>
+<span class="n">true_cdf_many</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">t_grid</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t_grid</span><span class="p">))</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">3.8</span><span class="p">),</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">sample_size</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">150</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">repeat</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+        <span class="n">new_sample</span> <span class="o">=</span> <span class="n">rng_many_ecdfs</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">sample_size</span><span class="p">)</span>
+        <span class="n">ecdf_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">new_sample</span><span class="p">),</span> <span class="n">t_grid</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">"right"</span><span class="p">)</span> <span class="o">/</span> <span class="n">sample_size</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t_grid</span><span class="p">,</span> <span class="n">ecdf_values</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s2">"post"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"tab:blue"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.55</span><span class="p">,</span>
+                <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"one ECDF"</span> <span class="k">if</span> <span class="n">repeat</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_grid</span><span class="p">,</span> <span class="n">true_cdf_many</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"black"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"true CDF"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Six independent samples, n=</span><span class="si">{</span><span class="n">sample_size</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+           <span class="n">xlabel</span><span class="o">=</span><span class="s2">"t"</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">1.03</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"lower right"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"CDF"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c9acb8df9b9b0b8e29d826aa6312ab7c">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>The next plot uses <strong>one new sample</strong> of size $150$ to construct a DKW
+band. Its $95\%$ guarantee concerns whether the band covers the fixed
+unknown CDF at every $t$ simultaneously, over repeated samples. It does
+not say that $95\%$ of the blue curves above must lie inside one band.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c23864f4f42302c524c91abf5882addb">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-python"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">150</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">rng_ecdf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">709</span><span class="p">)</span>
+<span class="n">sample</span> <span class="o">=</span> <span class="n">rng_ecdf</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">800</span><span class="p">)</span>
+<span class="n">ecdf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sample</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">grid</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">true_cdf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">grid</span><span class="p">))</span>
+
+<span class="n">epsilon_dkw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n</span><span class="p">))</span>
+<span class="n">lower_band</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ecdf</span> <span class="o">-</span> <span class="n">epsilon_dkw</span><span class="p">)</span>
+<span class="n">upper_band</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ecdf</span> <span class="o">+</span> <span class="n">epsilon_dkw</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">ecdf</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s2">"post"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"ECDF"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">true_cdf</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"black"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"true exponential CDF"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">lower_band</span><span class="p">,</span> <span class="n">upper_band</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="s2">"post"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s2">"95% DKW band"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">"t"</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">"CDF"</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">1.03</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c023ede910bbf65ba8d1b446b85cfefa">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-python"><pre><span></span><span class="c1"># For a continuous CDF, the exact sup distance is attained next to a sample jump.</span>
+<span class="n">ordered</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+<span class="n">f_at_ordered</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">ordered</span><span class="p">)</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">d_plus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">indices</span> <span class="o">/</span> <span class="n">n</span> <span class="o">-</span> <span class="n">f_at_ordered</span><span class="p">)</span>
+<span class="n">d_minus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">f_at_ordered</span> <span class="o">-</span> <span class="p">(</span><span class="n">indices</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">d_sup</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">d_plus</span><span class="p">,</span> <span class="n">d_minus</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"exact sup distance for this sample = </span><span class="si">{</span><span class="n">d_sup</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"DKW half-width = </span><span class="si">{</span><span class="n">epsilon_dkw</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"true CDF is inside this band everywhere?"</span><span class="p">,</span> <span class="n">d_sup</span> <span class="o">&lt;=</span> <span class="n">epsilon_dkw</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c2fcbc4197757520031cdfbf84d37f44">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Because the DKW upper bound tends to zero for every fixed
+$\varepsilon&gt;0$, it proves uniform consistency in probability:
+$\|\widehat F_n-F\|_\infty\to0$. This is different from checking one
+chosen value of $t$, and stronger than separately displaying several
+pointwise intervals.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c983f137f9f974b64d3611cbad95ef24">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Checkpoint:-empirical-risk-and-distribution-functions">Checkpoint: empirical risk and distribution functions<a class="anchor-link" href="#Checkpoint:-empirical-risk-and-distribution-functions">¶</a></h2><ol>
+<li>Change the classifier to always predict 1. Derive its population risk
+before estimating it, then compare its empirical risk with the Bayes rule.</li>
+<li>For a fixed $t$, derive the mean and variance of
+$\widehat F_n(t)$ by identifying its summands as Bernoulli variables.</li>
+<li>Repeat the DKW plot for a discrete Bernoulli distribution. Do not use the
+continuous-CDF shortcut for the exact supremum; evaluate the step functions
+directly on intervals around their jump points.</li>
 </ol>
 </div>
 </div>
