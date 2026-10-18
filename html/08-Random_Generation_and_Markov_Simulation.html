@@ -7535,16 +7535,17 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c7c465e347b76710de301d87d1e5fbe7">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c29ce9a00ce25b771cef5dfa6253fd1c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Lecture-8:-Random-Generation-and-Markov-Chain-Simulation">Lecture 8: Random Generation and Markov-Chain Simulation<a class="anchor-link" href="#Lecture-8:-Random-Generation-and-Markov-Chain-Simulation">¶</a></h1><p>This notebook accompanies Chapter 6, Section 6.1. We study finite-state
-deterministic generators, distinguish a transient from a period, check a
-full-period example, and see why uniform one-point frequencies do not imply
-independence.</p>
+<h1 id="Lecture-8:-Random-Generation-and-Markov-Chain-Simulation">Lecture 8: Random Generation and Markov-Chain Simulation<a class="anchor-link" href="#Lecture-8:-Random-Generation-and-Markov-Chain-Simulation">¶</a></h1><p>This notebook follows the lecture route: a finite deterministic generator,
+inverse-CDF and accept--reject sampling, a stated Box--Muller transformation,
+and simulation of a finite Markov chain. The generator plot reveals patterns
+hidden by one-point frequencies. The weather-chain simulation shows why a
+fresh random input is needed at each step.</p>
 </div>
 </div>
 </div>
@@ -7556,7 +7557,7 @@ independence.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 </pre></div>
@@ -7590,7 +7591,7 @@ indexing convention is explicit.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">lcg_states</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">modulus</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">lcg_states</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">modulus</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">modulus</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"modulus must be at least 2 and n must be nonnegative"</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">seed</span> <span class="o">&lt;</span> <span class="n">modulus</span><span class="p">:</span>
@@ -7632,7 +7633,7 @@ initial seed.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">orbit_structure</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">orbit_structure</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
     <span class="n">seen_at</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">path</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">state</span> <span class="o">=</span> <span class="n">seed</span>
@@ -7685,7 +7686,7 @@ cycle, but it does not give independent outputs.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">modulus</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">16</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">modulus</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">16</span>
 <span class="n">periods</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">seed</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">modulus</span><span class="p">):</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">transient</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">orbit_structure</span><span class="p">(</span>
@@ -7728,7 +7729,7 @@ positive probability to all $M^2$ pairs.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">normalized</span> <span class="o">=</span> <span class="n">cycle</span> <span class="o">/</span> <span class="n">modulus</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">normalized</span> <span class="o">=</span> <span class="n">cycle</span> <span class="o">/</span> <span class="n">modulus</span>
 <span class="n">successors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">cycle</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">modulus</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">3.6</span><span class="p">))</span>
@@ -7769,7 +7770,7 @@ cannot detect all such dependence.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">randu_modulus</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">31</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">randu_modulus</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">31</span>
 <span class="n">randu</span> <span class="o">=</span> <span class="n">lcg_states</span><span class="p">(</span><span class="mi">65539</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">randu_modulus</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">5000</span><span class="p">)</span>
 <span class="n">triple_relation</span> <span class="o">=</span> <span class="p">(</span><span class="n">randu</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">-</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">randu</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">9</span> <span class="o">*</span> <span class="n">randu</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">%</span> <span class="n">randu_modulus</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"all RANDU triples satisfy the modular relation:"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">triple_relation</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span>
@@ -7801,7 +7802,7 @@ seeded.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">rng_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">2026</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">rng_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">2026</span><span class="p">)</span>
 <span class="n">rng_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">2026</span><span class="p">)</span>
 <span class="n">sample_a</span> <span class="o">=</span> <span class="n">rng_a</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
 <span class="n">sample_b</span> <span class="o">=</span> <span class="n">rng_b</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
@@ -7851,7 +7852,7 @@ inputs at every step.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
 <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">808</span><span class="p">)</span>
@@ -7892,7 +7893,7 @@ $0&lt;u\leq1-p$ and 1 for $1-p&lt;u&lt;1$.</li>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">30_000</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">30_000</span>
 <span class="n">uniform_inputs</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
 <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span>
@@ -7920,7 +7921,7 @@ $0&lt;u\leq1-p$ and 1 for $1-p&lt;u&lt;1$.</li>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">x_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">x_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
 <span class="n">exponential_density</span> <span class="o">=</span> <span class="n">rate</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">rate</span> <span class="o">*</span> <span class="n">x_grid</span><span class="p">)</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mf">3.7</span><span class="p">))</span>
@@ -7965,7 +7966,7 @@ acceptance condition simplifies to $U\leq\cos Y$.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_cosine_target</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">generator</span><span class="p">):</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_cosine_target</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">generator</span><span class="p">):</span>
     <span class="n">accepted</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">proposals</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">accepted</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">:</span>
@@ -8020,7 +8021,7 @@ code even though an exact zero from the generator is extraordinarily rare.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">n_pairs</span> <span class="o">=</span> <span class="mi">10_000</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">n_pairs</span> <span class="o">=</span> <span class="mi">10_000</span>
 <span class="n">u1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">n_pairs</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">tiny</span><span class="p">)</span>
 <span class="n">u2</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">n_pairs</span><span class="p">)</span>
 <span class="n">radius</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">u1</span><span class="p">))</span>
@@ -8045,7 +8046,7 @@ code even though an exact zero from the generator is extraordinarily rare.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c8687d94593499a9d70e970f0e480c16">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cc8b43534b1ffa5033499cce1520de66">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8057,8 +8058,8 @@ P=\begin{pmatrix}3/4&amp;1/4\\1/2&amp;1/2\end{pmatrix}.
 $$</p>
 <p>Given the current state $x$, inversion sampling applied to row $P(x,\cdot)$
 chooses the next state. Under the mathematical model, a fresh independent
-uniform is used at every step. Reusing one uniform value generally gives the
-wrong multi-step law.</p>
+uniform is used at every step. The last calculation below reuses one
+uniform at both steps to show the resulting two-step law is different.</p>
 </div>
 </div>
 </div>
@@ -8070,7 +8071,7 @@ wrong multi-step law.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">"D"</span><span class="p">,</span> <span class="s2">"W"</span><span class="p">])</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">"D"</span><span class="p">,</span> <span class="s2">"W"</span><span class="p">])</span>
 <span class="n">transition</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span>
                        <span class="p">[</span><span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">]])</span>
 
@@ -8109,7 +8110,7 @@ wrong multi-step law.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="c1"># Check the two-step distribution with many independent simulated paths.</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Check the two-step distribution with many independent simulated paths.</span>
 <span class="n">repetitions</span> <span class="o">=</span> <span class="mi">20_000</span>
 <span class="n">end_states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">repetitions</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">repetition</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetitions</span><span class="p">):</span>
@@ -8126,8 +8127,32 @@ wrong multi-step law.</p>
 </div>
 </div>
 </div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c7d1532dbaf2f3dee298ae3d8ff0ac79">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c807ef498bec7deb4b733b81c855c66c">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Reuse one uniform at both steps, always starting from D.</span>
+<span class="n">reused_uniforms</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">repetitions</span><span class="p">)</span>
+<span class="n">first_states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">reused_uniforms</span> <span class="o">&lt;</span> <span class="n">transition</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">reused_end_states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+    <span class="n">reused_uniforms</span> <span class="o">&lt;</span> <span class="n">transition</span><span class="p">[</span><span class="n">first_states</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+<span class="p">)</span>
+<span class="n">reused_distribution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">reused_end_states</span><span class="p">,</span> <span class="n">minlength</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">repetitions</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"fresh inputs, simulated time-2 law:"</span><span class="p">,</span> <span class="n">empirical_distribution</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"fresh inputs, theoretical mu_0 P^2:"</span><span class="p">,</span> <span class="n">theoretical_distribution</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"reused input, simulated time-2 law:"</span><span class="p">,</span> <span class="n">reused_distribution</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"reused input, exact time-2 law: "</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cf55c4fb0e92ba1e58a1941c7fafae21">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8141,6 +8166,8 @@ $\pi/2$ is invalid for the uniform proposal.</li>
 <li>Create a three-state row-stochastic matrix, specify an initial
 distribution, and compare simulated time-$t$ frequencies with
 $\mu_0P^t$. State why a fresh input is required at each step.</li>
+<li>In the weather chain, derive the exact two-step law when the same
+uniform is reused and compare it with $\mu_0P^2$.</li>
 </ol>
 </div>
 </div>
