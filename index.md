@@ -55,3 +55,11 @@ Unreleased assignments are one-cell placeholders. They are replaced by problem n
 2. [Assignment_2](Assignment_2/)
 3. [Assignment_3](Assignment_3/)
 4. [Assignment_4](Assignment_4/)
+
+### Exam format and resources
+
+The latest re-exam, delivered in Inspera, is available here: [Download the exam PDF](Files/2026-Inspera-Reexam.pdf).
+
+This exam is an example of the format and types of questions to expect. This year's exam will follow a similar format and use similar types of questions, though the questions themselves will differ.
+
+Due to technical limitations in the exam halls, we cannot provide access to all the external websites listed in the sample exam. During the exam, you will have access to the course lecture notes PDF, online compilation environments, and relevant documentation.
