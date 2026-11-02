@@ -7550,7 +7550,7 @@ are finite and simulations use a fixed seed.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c72b44bcc92761d64502fb8812d3ce66">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c7a21171919dd52bb8070ed201d79987">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7566,6 +7566,7 @@ are finite and simulations use a fixed seed.</p>
 <span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">suppress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">validate_transition_matrix</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Return P as a float array after checking it is square with nonnegative rows summing to one."""</span>
     <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">P</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">P</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">P</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"P must be square"</span><span class="p">)</span>
@@ -7574,6 +7575,10 @@ are finite and simulations use a fixed seed.</p>
     <span class="k">return</span> <span class="n">P</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">simulate_paths</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">,</span> <span class="n">n_paths</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Simulate n_paths independent chains from initial_state.</span>
+
+<span class="sd">    Returns an int array of shape (n_paths, n_steps + 1); row i is the path X_0, ..., X_n.</span>
+<span class="sd">    """</span>
     <span class="n">P</span> <span class="o">=</span> <span class="n">validate_transition_matrix</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
     <span class="n">paths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n_paths</span><span class="p">,</span> <span class="n">n_steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
     <span class="n">paths</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">initial_state</span>
@@ -7652,7 +7657,7 @@ below is only a diagnostic for these transparent examples.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cc523ca165226538d0ca4808797dcbc3">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cde6f6a3727d623858858197849e347a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7661,6 +7666,10 @@ below is only a diagnostic for these transparent examples.</p>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">transitive_closure</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Boolean matrix R with R[x, y] True iff y is reachable from x (x -&gt; y) in zero or more steps.</span>
+
+<span class="sd">    Uses Warshall's algorithm on the graph with an edge x -&gt; y whenever P(x, y) &gt; 0.</span>
+<span class="sd">    """</span>
     <span class="n">reachable</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">P</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
     <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">reachable</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">)):</span>
@@ -7668,6 +7677,7 @@ below is only a diagnostic for these transparent examples.</p>
     <span class="k">return</span> <span class="n">reachable</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">communication_classes</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Partition the states into communication classes (x &lt;-&gt; y), each as a sorted list."""</span>
     <span class="n">reachable</span> <span class="o">=</span> <span class="n">transitive_closure</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
     <span class="n">unused</span><span class="p">,</span> <span class="n">classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">))),</span> <span class="p">[]</span>
     <span class="k">while</span> <span class="n">unused</span><span class="p">:</span>
@@ -7678,6 +7688,7 @@ below is only a diagnostic for these transparent examples.</p>
     <span class="k">return</span> <span class="n">classes</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">possible_return_times</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="mi">12</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""List the n &lt;= horizon with P^n(state, state) &gt; 0; their gcd is the period of state."""</span>
     <span class="n">power</span><span class="p">,</span> <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">)),</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">horizon</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
         <span class="n">power</span> <span class="o">=</span> <span class="n">power</span> <span class="o">@</span> <span class="n">P</span>
@@ -7713,7 +7724,7 @@ $m_A(x)=1+\sum_yP(x,y)m_A(y)$, with $m_A=0$ on $A$.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c8b411fc5b97db13e34eef954d76ab55">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cc7b56fd83d75aa79618c6f46e6d3ce4">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7722,6 +7733,10 @@ $m_A(x)=1+\sum_yP(x,y)m_A(y)$, with $m_A=0$ on $A$.</p>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">hitting_probabilities</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Vector h with h[x] = P_x(chain ever hits targets).</span>
+
+<span class="sd">    States that cannot reach targets get h = 0; the rest solve h = P h off the targets.</span>
+<span class="sd">    """</span>
     <span class="n">P</span> <span class="o">=</span> <span class="n">validate_transition_matrix</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
     <span class="n">targets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">targets</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
     <span class="n">can_reach</span> <span class="o">=</span> <span class="n">transitive_closure</span><span class="p">(</span><span class="n">P</span><span class="p">)[:,</span> <span class="n">targets</span><span class="p">]</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -7736,6 +7751,10 @@ $m_A(x)=1+\sum_yP(x,y)m_A(y)$, with $m_A=0$ on $A$.</p>
     <span class="k">return</span> <span class="n">h</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">mean_hitting_times</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Return (h, m): hitting probabilities and mean hitting times of targets.</span>
+
+<span class="sd">    m[x] = E_x[time to hit targets]; it is set to inf where h[x] &lt; 1.</span>
+<span class="sd">    """</span>
     <span class="n">targets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">targets</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
     <span class="n">h</span> <span class="o">=</span> <span class="n">hitting_probabilities</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span>
     <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
@@ -7783,7 +7802,7 @@ aperiodicity.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cbd22a54a67fe98580dece5d18d823b4">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cef318892ae7d8e950f3cb5a6d05d061">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7792,6 +7811,7 @@ aperiodicity.</p>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">unique_stationary_distribution</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Solve pi P = pi, sum(pi) = 1, assuming the solution is unique (e.g. P irreducible)."""</span>
     <span class="n">P</span> <span class="o">=</span> <span class="n">validate_transition_matrix</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
     <span class="n">A</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">T</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">))</span>
     <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">))</span>
