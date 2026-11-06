@@ -1,0 +1,43 @@
+Dataset: Bike Sharing, daily data (course teaching extract)
+
+Local file: data/dc_bikeshare.csv
+Original provider: UCI Machine Learning Repository.
+Citation: Fanaee-T, H. (2013), Bike Sharing [Dataset], UCI Machine Learning
+Repository, https://doi.org/10.24432/C5W894.
+Related publication: Fanaee-T, Hadi, and Gama, Joao, "Event labeling combining
+ensemble detectors and background knowledge", Progress in Artificial
+Intelligence (2013), pp. 1-15, Springer Berlin Heidelberg,
+doi:10.1007/s13748-013-0040-3. The dataset's readme asks publications that use
+the data to cite this paper.
+Licence: Creative Commons Attribution 4.0 International (CC BY 4.0).
+Credit requirement: cite the dataset and the publication when sharing the data,
+an analysis, or an adapted copy.
+
+Original subject: daily counts of rented bikes in the Capital Bikeshare system,
+with weather and calendar information, for 2011 and 2012.
+
+Rows and columns: 731 rows, one per day in date order, with no missing values.
+- date: the day, from 2011-01-01 to 2012-12-31 (original field dteday).
+- rentals: total bikes rented that day (original field cnt).
+- temperature_c: temperature in degrees Celsius (original temp times 41,
+  rounded to two decimals).
+- humidity_pct: humidity in percent (original hum times 100, rounded to two
+  decimals).
+- wind_speed: wind speed (original windspeed times 67, rounded to two decimals).
+  The readme gives the scaling but does not state a unit.
+- weather: 1 clear or partly cloudy; 2 mist or cloud; 3 light rain or snow
+  (original field weathersit). Its fourth category, heavy rain or snow, does
+  not occur in the daily file.
+- working_day: 1 if the day is neither a weekend nor a holiday, otherwise 0
+  (original field workingday).
+
+Transformation: produced from the original day.csv by the column selection,
+renaming, and rescaling above. The original fields season, yr, mnth, holiday,
+weekday, atemp, casual, and registered are omitted. The casual and registered
+counts add up to the rentals count.
+
+Fitness limitation: this is one system over two years, and consecutive days are
+related. Ridership grew strongly over the period. The humidity value of
+2011-03-10 is 0, which looks like a recording problem, and is kept as supplied.
+Results do not automatically transfer to other cities or to later years, and
+they do not show a causal effect of the weather.

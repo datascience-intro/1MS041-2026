@@ -7535,7 +7535,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c26ca8a68882ae4a6cd3828bbe9c70c1">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ca0d7602804ade7f686c250fe7d5e4f3">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7545,8 +7545,8 @@ a.anchor-link {
 convention: after fixing the state order, $P(x,y)$ is the probability
 of moving from $x$ to $y$, and $\mu_t=\mu_0P^t$.</p>
 <p>The route is communication and period, hitting times, stationarity,
-reversibility, graph walks, and a small PageRank model. All examples
-are finite and simulations use a fixed seed.</p>
+reversibility, graph walks, a small PageRank model, and fitting a
+chain to data. All examples are finite and simulations use a fixed seed.</p>
 </div>
 </div>
 </div>
@@ -7926,7 +7926,149 @@ aperiodic, and its unique stationary probabilities are PageRank scores.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c094d8d62db474743184e58d1a50e160">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ce3b6661558c38287762287dbdddf105">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Fitting-a-transition-matrix-to-data">Fitting a transition matrix to data<a class="anchor-link" href="#Fitting-a-transition-matrix-to-data">¶</a></h2><p>So far $P$ has been given. In practice we observe a path
+$x_0,x_1,\ldots,x_n$ and have to estimate $P$. This goes beyond
+Sections 7.3--7.5 and uses the likelihood from Lecture 7.</p>
+<p>Let $N(x,y)$ be the number of times $t\in\{0,\ldots,n-1\}$ with
+$x_t=x$ and $x_{t+1}=y$, and let $N(x)=\sum_yN(x,y)$ be the number
+of observed moves out of $x$. By the Markov property, the likelihood
+of the path is
+$$
+\mu_0(x_0)\prod_{t=0}^{n-1}P(x_t,x_{t+1})
+=\mu_0(x_0)\prod_{x,y}P(x,y)^{N(x,y)}.
+$$
+The factor $\mu_0(x_0)$ does not involve $P$, and each row of $P$
+appears in its own factor, so we can maximize one row at a time.
+For a state $x$ with $N(x)&gt;0$, maximizing
+$\sum_yN(x,y)\log P(x,y)$ subject to $\sum_yP(x,y)=1$ gives
+$$
+\widehat P(x,y)=\frac{N(x,y)}{N(x)}.
+$$
+So the estimate is the fraction of moves out of $x$ that went to $y$.
+If $N(x)=0$, the data say nothing about row $x$.</p>
+<p>We start with ten days that can be counted by hand. The last day
+has no next day, so it gives no move: there are three wet days below,
+but only two moves out of $\mathsf W$.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c21a6e78ba001eecc6f927151e3a124d">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">fit_transition_matrix</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">n_states</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Return (counts, P_hat) from one observed path of integer states.</span>
+
+<span class="sd">    counts[x, y] is the number of moves x -&gt; y, and P_hat[x, y] is</span>
+<span class="sd">    counts[x, y] / counts[x].sum(). Raises ValueError if some state has no outgoing move.</span>
+<span class="sd">    """</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_states</span><span class="p">,</span> <span class="n">n_states</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">counts</span><span class="p">,</span> <span class="p">(</span><span class="n">path</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">totals</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">totals</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"a state has no observed outgoing move"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">counts</span><span class="p">,</span> <span class="n">validate_transition_matrix</span><span class="p">(</span><span class="n">counts</span> <span class="o">/</span> <span class="n">totals</span><span class="p">)</span>
+
+<span class="n">observed_days</span> <span class="o">=</span> <span class="s2">"DDDWWDDDDW"</span>
+<span class="n">observed_path</span> <span class="o">=</span> <span class="p">[</span><span class="n">states</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">day</span><span class="p">)</span> <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">observed_days</span><span class="p">]</span>
+<span class="n">counts_days</span><span class="p">,</span> <span class="n">P_days</span> <span class="o">=</span> <span class="n">fit_transition_matrix</span><span class="p">(</span><span class="n">observed_path</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">states</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"state order:"</span><span class="p">,</span> <span class="n">states</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"moves N(x, y):"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">counts_days</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"fitted P:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">P_days</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c91f4c675109b4601305b1b3109a29a9">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Ten days give $\widehat P(\mathsf D,\mathsf W)=2/7$ and
+$\widehat P(\mathsf W,\mathsf W)=1/2$, but with so few moves these
+numbers could easily have come out quite differently.</p>
+<p>To see how much data we need, we simulate from the known <code>P_weather</code>,
+fit using only the paths, and compare with the truth. Row $x$ is
+estimated from about $\pi(x)n$ moves, so its error should shrink
+like $1/\sqrt n$. The wet row should be less accurate, because
+$\pi(\mathsf W)=1/3$ gives it half as many moves as the dry row.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c0fd5d44eef74d7025cd462af0e17a08">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">path_lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">100</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">1_000</span><span class="p">,</span> <span class="mi">3_000</span><span class="p">,</span> <span class="mi">10_000</span><span class="p">])</span>
+<span class="n">fit_paths</span> <span class="o">=</span> <span class="n">simulate_paths</span><span class="p">(</span><span class="n">P_weather</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">path_lengths</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">200</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
+
+<span class="n">mean_errors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">path_lengths</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">path_lengths</span><span class="p">):</span>
+    <span class="n">fits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">fit_transition_matrix</span><span class="p">(</span><span class="n">path</span><span class="p">[:</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">fit_paths</span><span class="p">])</span>
+    <span class="n">mean_errors</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">fits</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">P_weather</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+    <span class="n">mean_errors</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">fits</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">P_weather</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+<span class="n">P_fitted</span> <span class="o">=</span> <span class="n">fit_transition_matrix</span><span class="p">(</span><span class="n">fit_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"true P:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">P_weather</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"fitted P from one path with n = </span><span class="si">{</span><span class="n">path_lengths</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">P_fitted</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"true stationary distribution:"</span><span class="p">,</span> <span class="n">pi_weather</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"stationary distribution of fitted P:"</span><span class="p">,</span> <span class="n">unique_stationary_distribution</span><span class="p">(</span><span class="n">P_fitted</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">path_lengths</span><span class="p">,</span> <span class="n">mean_errors</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">"o-"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"dry row"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">path_lengths</span><span class="p">,</span> <span class="n">mean_errors</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">"s-"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"wet row"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">path_lengths</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">path_lengths</span><span class="p">),</span> <span class="s2">"k--"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">"$1/\sqrt</span><span class="si">{n}</span><span class="s2">$"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"number of moves n"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"mean absolute error, over 200 paths"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ca74f51a15e197095a03a40aaa2c0a13">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>The fitted matrix approaches the true one, and the wet row has the
+larger error, as expected. The fitted stationary distribution comes
+from the fitted matrix, so it inherits that error.</p>
+<p>Counting always returns a valid matrix, even when the data are not a
+Markov chain. Here the fit works because we simulated from a
+homogeneous Markov chain. For real data, one fixed $P$ and dependence
+only on the present remain modelling assumptions that the fit does
+not check.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c48d66d33a7b45560ca2bf4d18c9e5b7">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7940,7 +8082,7 @@ definitions and first-step equations.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs celltag_exercise" id="cell-id=c96cc137b5d40d0fc865742745f1dcbf">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs celltag_exercise" id="cell-id=cf2f47fc21f2836142d25e6504251f70">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>

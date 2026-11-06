@@ -7535,21 +7535,23 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c8b5f3d1aa2d24a39f17351b19cdd869">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cebe097e59854c4691aeedfaf07b3750">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="ProbSS-5-%E2%80%94-Learning-a-Markov-chain-from-data">ProbSS 5 — Learning a Markov chain from data<a class="anchor-link" href="#ProbSS-5-%E2%80%94-Learning-a-Markov-chain-from-data">¶</a></h1><h2 id="What-you-will-do">What you will do<a class="anchor-link" href="#What-you-will-do">¶</a></h2><p>Using a local daily-rainfall series, you will turn observations into two
-states, estimate transition probabilities from an earlier period, and test
-predictions on later days. You will also simulate the fitted chain and look
-for patterns that a first-order, time-homogeneous model misses.</p>
-<p>This notebook is separate from the Lecture 9 notebook.</p>
+<h1 id="ProbSS-5:-Markov-chains-(compute,-classify,-learn-from-data)">ProbSS 5: Markov chains (compute, classify, learn from data)<a class="anchor-link" href="#ProbSS-5:-Markov-chains-(compute,-classify,-learn-from-data)">¶</a></h1><p>This notebook has three parts, each with one message.</p>
+<ol>
+<li><strong>Compute.</strong> A distribution is a row vector and moves <em>forward</em> ($\mu_{t+1} = \mu_t P$). A function is a column vector and moves <em>backward</em> ($(Pf)(x) = \mathrm{E}_x[f(X_1)]$).</li>
+<li><strong>Classify.</strong> Irreducibility and the period depend only on which entries of $P$ are positive. Together they decide what the stationary distribution tells us about the long run.</li>
+<li><strong>Learn from data.</strong> Estimating $P$ is just counting. The real test is to simulate the fitted chain and compare it with data it has not seen.</li>
+</ol>
+<p>The worksheet exercises are referred to by their numbers on the Problem Session 5 sheet. Solve them by hand first; the cells here are for checking.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs celltag_setup" id="cell-id=c132bcc7a24fd47f4796997ae1677d86">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cf82a6c04287512f1a49f1e315ab81b9">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7557,9 +7559,10 @@ for patterns that a first-order, time-homogeneous model misses.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">gcd</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
@@ -7575,24 +7578,26 @@ for patterns that a first-order, time-homogeneous model misses.</p>
         <span class="sa">f</span><span class="s2">"Could not find </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">. Run this notebook from master/jp "</span>
         <span class="s2">"or from the repository root."</span>
     <span class="p">)</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">suppress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=caa19d71cd05c3c2004ec2d7a109f548">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c0e066bc01aead9616f29c45a0cc598f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.-Decide-what-the-observations-and-states-mean">1. Decide what the observations and states mean<a class="anchor-link" href="#1.-Decide-what-the-observations-and-states-mean">¶</a></h2><p>One observation is one dated rainfall amount in Christchurch. Define state 0 as dry (0 mm) and state 1 as wet (strictly positive rainfall). The threshold is fixed before fitting.</p>
-<p>The first-order homogeneous Markov model assumes that, conditional on today's state, tomorrow's state does not depend on earlier states, and that one transition matrix applies throughout the period.</p>
+<h2 id="1.-Two-ways-to-compute-with-$P$-(worksheet-exercise-1)">1. Two ways to compute with $P$ (worksheet exercise 1)<a class="anchor-link" href="#1.-Two-ways-to-compute-with-$P$-(worksheet-exercise-1)">¶</a></h2><p>For the weather chain we compute $\mathrm{E}_{\mathrm D}[\#\text{wet days among } X_1, X_2, X_3] = \sum_{t=1}^{3} \mu_0 P^t f$ with $f = \mathbf 1_{\{\mathrm W\}}$.</p>
+<p>NumPy's 1-D arrays do not know whether they are rows or columns. <strong>The side of <code>@</code> decides:</strong> <code>mu @ P</code> treats <code>mu</code> as a row, and <code>P @ f</code> treats <code>f</code> as a column.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c09d4e78334bfe13524719348504a5bf">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c4b48f34cc5fdf64b63041a170d4ce94">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7600,47 +7605,263 @@ for patterns that a first-order, time-homogeneous model misses.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">rain</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">P_weather</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">3</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">],</span>     <span class="c1"># states: 0 = D (dry), 1 = W (wet)</span>
+                      <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">]])</span>
+<span class="n">mu0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>            <span class="c1"># start dry: a distribution (row)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>              <span class="c1"># f = 1{W}: a function (column)</span>
+
+<span class="c1"># Forward: push the distribution, then evaluate f.</span>
+<span class="n">forward</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">mu0</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">@</span> <span class="n">P_weather</span>
+    <span class="n">forward</span> <span class="o">+=</span> <span class="n">mu</span> <span class="o">@</span> <span class="n">f</span>
+
+<span class="c1"># Backward: pull the function, then evaluate at the start.</span>
+<span class="n">backward</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">f</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">P_weather</span> <span class="o">@</span> <span class="n">g</span>
+    <span class="n">backward</span> <span class="o">+=</span> <span class="n">g</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"forward  (start D only):"</span><span class="p">,</span> <span class="n">forward</span><span class="p">,</span> <span class="s2">"  exact 57/64 ="</span><span class="p">,</span> <span class="mi">57</span><span class="o">/</span><span class="mi">64</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"backward (both starts): "</span><span class="p">,</span> <span class="n">backward</span><span class="p">,</span> <span class="s2">"  exact [57/64, 39/32] ="</span><span class="p">,</span> <span class="p">[</span><span class="mi">57</span><span class="o">/</span><span class="mi">64</span><span class="p">,</span> <span class="mi">39</span><span class="o">/</span><span class="mi">32</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cf983a383f8c8304e94874da9be1241c">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><strong>Exercise 1(c): time-dependent $P$.</strong> The law of $X_2$ is $\mu_0 P_1 P_2$, and $\mathrm{E}_x[f(X_2)] = (P_1 P_2 f)(x)$. In the backward computation, the <em>last</em> transition $P_2$ is applied <em>first</em>.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c707ceaf87c04632d7fa16d81130f0da">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">P1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]])</span>
+<span class="n">P2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]])</span>
+<span class="n">f1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>                      <span class="c1"># f = 1{state 0}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"law of X2, P1 then P2:"</span><span class="p">,</span> <span class="n">mu0</span> <span class="o">@</span> <span class="n">P1</span> <span class="o">@</span> <span class="n">P2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"law of X2, P2 then P1:"</span><span class="p">,</span> <span class="n">mu0</span> <span class="o">@</span> <span class="n">P2</span> <span class="o">@</span> <span class="n">P1</span><span class="p">,</span> <span class="s2">" (order matters)"</span><span class="p">)</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">P2</span> <span class="o">@</span> <span class="n">f1</span>        <span class="c1"># first pull back through the LAST step</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">P1</span> <span class="o">@</span> <span class="n">g</span>         <span class="c1"># then through the first step</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"E_x f(X2), backward:  "</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="s2">"  forward check from x=0:"</span><span class="p">,</span> <span class="n">mu0</span> <span class="o">@</span> <span class="n">P1</span> <span class="o">@</span> <span class="n">P2</span> <span class="o">@</span> <span class="n">f1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cfc52889df19fa90a9d81a7da7292cc6">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><strong>Exercises 23–24: two-step probabilities.</strong> <code>P**2</code> squares every entry, while <code>P @ P</code> is the two-step matrix. A quick sanity check catches the bug: the rows of a stochastic matrix must sum to 1.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cbfc5940bfe92a224130ec30e4d0baf6">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">DOCK</span><span class="p">,</span> <span class="n">SORT</span><span class="p">,</span> <span class="n">DISPATCH</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+<span class="n">P_hat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.80</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.40</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">]])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"row sums of P**2:  "</span><span class="p">,</span> <span class="p">(</span><span class="n">P_hat</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="s2">" &lt;- not a transition matrix"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"row sums of P @ P: "</span><span class="p">,</span> <span class="p">(</span><span class="n">P_hat</span> <span class="o">@</span> <span class="n">P_hat</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Exercise 23: P(X2 = Dispatch | X0 = Dock) ="</span><span class="p">,</span> <span class="p">(</span><span class="n">P_hat</span> <span class="o">@</span> <span class="n">P_hat</span><span class="p">)[</span><span class="n">DOCK</span><span class="p">,</span> <span class="n">DISPATCH</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cb30a6d80982a9d4899dae9ac6f2705a">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="2.-Irreducibility-and-periodicity-(exercises-25,-25b,-25c)">2. Irreducibility and periodicity (exercises 25, 25b, 25c)<a class="anchor-link" href="#2.-Irreducibility-and-periodicity-(exercises-25,-25b,-25c)">¶</a></h2><p>The long-run theory rests on two conditions:</p>
+<ul>
+<li><strong>Irreducible:</strong> every state can reach every other state. Then the stationary distribution $\pi$ is unique, and the fraction of time one path spends in $x$ converges to $\pi(x)$.</li>
+<li><strong>Aperiodic</strong> (in addition): the period $d = \gcd\{k \ge 1 : P^k(x,x) &gt; 0\}$ equals 1. Only then does the law of $X_t$ converge to $\pi$ from every start (exercise 27).</li>
+</ul>
+<p>Both conditions only depend on <strong>which</strong> entries of $P$ are positive. Draw an arrow $x \to y$ whenever $P(x,y) &gt; 0$.</p>
+<ul>
+<li><code>is_irreducible</code> collects, for each start $x$, all states reachable from $x$ (<code>reachable_from</code>) and checks that this is all $n$ states.</li>
+<li><code>period</code> computes the gcd of the return times of state 0 by checking $P^k(0,0) &gt; 0$ for $k = 1, \dots, 3n$. For an irreducible chain all states have the same period, so one state suffices. Checking only up to $k = n$ is <strong>not</strong> enough (exercise 25b).</li>
+</ul>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c64e74c31b1bb5c9c22aa608e941247b">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reachable_from</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
+    <span class="c1"># All states that can be reached from `start` by following arrows x -&gt; y with P[x, y] &gt; 0.</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+    <span class="n">reached</span> <span class="o">=</span> <span class="p">{</span><span class="n">start</span><span class="p">}</span>
+    <span class="n">to_visit</span> <span class="o">=</span> <span class="p">[</span><span class="n">start</span><span class="p">]</span>
+    <span class="k">while</span> <span class="n">to_visit</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">to_visit</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">y</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reached</span><span class="p">:</span>
+                <span class="n">reached</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+                <span class="n">to_visit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">reached</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_irreducible</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
+    <span class="c1"># Irreducible: from EVERY state we can reach ALL n states.</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">reachable_from</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">period</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="c1"># gcd of all k with P^k(x, x) &gt; 0. Checking k = 1, ..., 3n is enough.</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+    <span class="n">return_times</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">Pk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">Pk</span> <span class="o">=</span> <span class="n">Pk</span> <span class="o">@</span> <span class="n">P</span>                      <span class="c1"># now Pk = P^k</span>
+        <span class="k">if</span> <span class="n">Pk</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">return_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">gcd</span><span class="p">(</span><span class="o">*</span><span class="n">return_times</span><span class="p">)</span>    
+
+<span class="n">mats</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"25 A"</span><span class="p">:</span> <span class="p">[[</span><span class="mf">.1</span><span class="p">,</span><span class="mf">.4</span><span class="p">,</span><span class="mf">.2</span><span class="p">,</span><span class="mf">.2</span><span class="p">,</span><span class="mf">.1</span><span class="p">],[</span><span class="mf">.2</span><span class="p">,</span><span class="mf">.1</span><span class="p">,</span><span class="mf">.3</span><span class="p">,</span><span class="mf">.3</span><span class="p">,</span><span class="mf">.1</span><span class="p">],[</span><span class="mf">.1</span><span class="p">,</span><span class="mf">.2</span><span class="p">,</span><span class="mf">.2</span><span class="p">,</span><span class="mf">.3</span><span class="p">,</span><span class="mf">.2</span><span class="p">],[</span><span class="mf">.2</span><span class="p">,</span><span class="mf">.2</span><span class="p">,</span><span class="mf">.2</span><span class="p">,</span><span class="mf">.1</span><span class="p">,</span><span class="mf">.3</span><span class="p">],[</span><span class="mf">.3</span><span class="p">,</span><span class="mf">.1</span><span class="p">,</span><span class="mf">.2</span><span class="p">,</span><span class="mf">.2</span><span class="p">,</span><span class="mf">.2</span><span class="p">]],</span>
+    <span class="s2">"25 B"</span><span class="p">:</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mf">.5</span><span class="p">,</span><span class="mf">.5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">.4</span><span class="p">,</span><span class="mf">.6</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">.7</span><span class="p">,</span><span class="mf">.3</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]],</span>
+    <span class="s2">"25 C"</span><span class="p">:</span> <span class="p">[[</span><span class="mf">.3</span><span class="p">,</span><span class="mf">.3</span><span class="p">,</span><span class="mf">.2</span><span class="p">,</span><span class="mf">.1</span><span class="p">,</span><span class="mf">.1</span><span class="p">],[</span><span class="mf">.2</span><span class="p">,</span><span class="mf">.3</span><span class="p">,</span><span class="mf">.3</span><span class="p">,</span><span class="mf">.1</span><span class="p">,</span><span class="mf">.1</span><span class="p">],[</span><span class="mf">.1</span><span class="p">,</span><span class="mf">.2</span><span class="p">,</span><span class="mf">.4</span><span class="p">,</span><span class="mf">.2</span><span class="p">,</span><span class="mf">.1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">.5</span><span class="p">,</span><span class="mf">.5</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">.4</span><span class="p">,</span><span class="mf">.6</span><span class="p">]],</span>
+    <span class="s2">"25 D"</span><span class="p">:</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">.5</span><span class="p">,</span><span class="mf">.3</span><span class="p">,</span><span class="mf">.2</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">.2</span><span class="p">,</span><span class="mf">.5</span><span class="p">,</span><span class="mf">.3</span><span class="p">],[</span><span class="mf">.6</span><span class="p">,</span><span class="mf">.4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mf">.5</span><span class="p">,</span><span class="mf">.5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mf">.3</span><span class="p">,</span><span class="mf">.7</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]],</span>
+    <span class="s2">"25b P"</span><span class="p">:</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mf">.5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">.5</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]],</span>
+    <span class="s2">"25b R"</span><span class="p">:</span> <span class="p">[[</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mf">.5</span><span class="p">,</span><span class="mf">.5</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mf">.5</span><span class="p">,</span><span class="mf">.5</span><span class="p">]],</span>
+    <span class="s2">"25c"</span><span class="p">:</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">.5</span><span class="p">,</span><span class="mf">.5</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]],</span>
+<span class="p">}</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">M</span> <span class="ow">in</span> <span class="n">mats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_irreducible</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">6</span><span class="si">}</span><span class="s2">: not irreducible"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">6</span><span class="si">}</span><span class="s2">: irreducible, period = </span><span class="si">{</span><span class="n">period</span><span class="p">(</span><span class="n">M</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c7f8324dd7c995ded3ecf11b7adebf0b">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="The-stationary-distribution-(exercise-26)">The stationary distribution (exercise 26)<a class="anchor-link" href="#The-stationary-distribution-(exercise-26)">¶</a></h3><p>$\pi P = \pi$ is a <strong>left</strong> eigenvector equation, but <code>np.linalg.solve</code> wants a column vector of unknowns. Transposing gives $(P - I)^\top \pi = 0$. These $n$ equations are redundant, so we replace the last one by $\pi(0) + \dots + \pi(n-1) = 1$.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cf56c237d3ed63addfa7276c210a3bd9">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">stationary</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="p">(</span><span class="n">P</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>                <span class="c1"># (P - I)^T pi = 0</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">M</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">1.0</span>                       <span class="c1"># replace the last equation ...</span>
+    <span class="n">b</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>                          <span class="c1"># ... by pi(0) + ... + pi(n-1) = 1</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+<span class="n">pi</span> <span class="o">=</span> <span class="n">stationary</span><span class="p">(</span><span class="n">P_hat</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Exercise 26: pi ="</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="s2">"  pi_Sort ="</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">pi</span><span class="p">[</span><span class="n">SORT</span><span class="p">],</span> <span class="mi">4</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"check pi P = pi:"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">pi</span> <span class="o">@</span> <span class="n">P_hat</span><span class="p">,</span> <span class="n">pi</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cc71698c8da784cde1d10cfec2f15ce7">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="3.-Learning-a-chain-from-rainfall-data">3. Learning a chain from rainfall data<a class="anchor-link" href="#3.-Learning-a-chain-from-rainfall-data">¶</a></h2><p>Daily rainfall in Christchurch is reduced to two states: dry (0 mm) and wet (&gt; 0 mm). The plan has three steps:</p>
+<ol>
+<li><strong>Estimate</strong> $P$ from the first 80% of the days (the <em>training</em> period) by counting transitions.</li>
+<li><strong>Simulate</strong> the fitted chain for as many days as the remaining 20% (the <em>test</em> period).</li>
+<li><strong>Compare</strong> the simulated weather with the true weather in the test period, and with a model without memory (independent days).</li>
+</ol>
+<p>For simplicity we treat the records as consecutive days and ignore the few missing dates.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c4b0ab2f75e50aa292170db664552694">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">rain</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
     <span class="n">course_data</span><span class="p">(</span><span class="s2">"rainfallInChristchurch.csv"</span><span class="p">),</span>
     <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">"date_code"</span><span class="p">,</span> <span class="s2">"rain_mm"</span><span class="p">],</span>
 <span class="p">)</span>
-<span class="n">rain</span><span class="p">[</span><span class="s2">"date"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
-    <span class="n">rain</span><span class="p">[</span><span class="s2">"date_code"</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"int64"</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-    <span class="nb">format</span><span class="o">=</span><span class="s2">"%Y%m</span><span class="si">%d</span><span class="s2">"</span><span class="p">,</span>
-    <span class="n">errors</span><span class="o">=</span><span class="s2">"raise"</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">rain</span><span class="p">[</span><span class="s2">"rain_mm"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">rain</span><span class="p">[</span><span class="s2">"rain_mm"</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"coerce"</span><span class="p">)</span>
-<span class="n">rain</span> <span class="o">=</span> <span class="n">rain</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">"date"</span><span class="p">,</span> <span class="s2">"rain_mm"</span><span class="p">])</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"date"</span><span class="p">)</span>
-<span class="n">duplicate_rows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rain</span><span class="o">.</span><span class="n">duplicated</span><span class="p">([</span><span class="s2">"date"</span><span class="p">,</span> <span class="s2">"rain_mm"</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
-<span class="n">rain</span> <span class="o">=</span> <span class="n">rain</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span><span class="s2">"date"</span><span class="p">,</span> <span class="s2">"rain_mm"</span><span class="p">])</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">rain</span><span class="p">[</span><span class="s2">"wet"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">rain</span><span class="p">[</span><span class="s2">"rain_mm"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
-<span class="n">calendar_gap</span> <span class="o">=</span> <span class="n">rain</span><span class="p">[</span><span class="s2">"date"</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">days</span>
-<span class="n">nonconsecutive_gaps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">calendar_gap</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">ne</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="n">rain</span><span class="p">[</span><span class="s2">"rain_mm"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">rain</span><span class="p">[</span><span class="s2">"rain_mm"</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"coerce"</span><span class="p">)</span>    <span class="c1"># unreadable entries -&gt; NaN</span>
+<span class="n">rain</span> <span class="o">=</span> <span class="n">rain</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"date_code"</span><span class="p">)</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s2">"date_code"</span><span class="p">)</span>
 
-<span class="k">assert</span> <span class="n">rain</span><span class="p">[</span><span class="s2">"date"</span><span class="p">]</span><span class="o">.</span><span class="n">is_monotonic_increasing</span>
-<span class="k">assert</span> <span class="ow">not</span> <span class="n">rain</span><span class="p">[</span><span class="s2">"date"</span><span class="p">]</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
-<span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">rain</span><span class="p">[</span><span class="s2">"wet"</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span><span class="o">.</span><span class="n">issubset</span><span class="p">({</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">})</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">rain</span><span class="p">[[</span><span class="s2">"date"</span><span class="p">,</span> <span class="s2">"rain_mm"</span><span class="p">,</span> <span class="s2">"wet"</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Date range:"</span><span class="p">,</span> <span class="n">rain</span><span class="p">[</span><span class="s2">"date"</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span> <span class="s2">"to"</span><span class="p">,</span> <span class="n">rain</span><span class="p">[</span><span class="s2">"date"</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Exact duplicate rows removed:"</span><span class="p">,</span> <span class="n">duplicate_rows</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Nonconsecutive calendar gaps retained:"</span><span class="p">,</span> <span class="n">nonconsecutive_gaps</span><span class="p">)</span>
+<span class="n">wet</span> <span class="o">=</span> <span class="p">(</span><span class="n">rain</span><span class="p">[</span><span class="s2">"rain_mm"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>                  <span class="c1"># state 0 = dry, 1 = wet</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"number of days:      "</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">wet</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"fraction of wet days:"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">wet</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="mi">3</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c999e3c09878c79e5124ade35278f67b">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c3777bc64536547f665c9c58e0665ba4">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="2.-Fit-in-time-order-and-save-a-test-period">2. Fit in time order and save a test period<a class="anchor-link" href="#2.-Fit-in-time-order-and-save-a-test-period">¶</a></h2>
+<h3 id="Step-1:-estimate-$P$-on-the-training-period">Step 1: estimate $P$ on the training period<a class="anchor-link" href="#Step-1:-estimate-$P$-on-the-training-period">¶</a></h3><p>$\hat P(x,y) = \dfrac{\#\{\text{days with state } x \text{ followed by state } y\}}{\#\{\text{days with state } x \text{ that have a next day}\}}$.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c8ac970e81c6d7c4581516d991bc8d4a">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cd10b3bdb6cff8d5a72fdf27a146ed5a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7648,39 +7869,37 @@ for patterns that a first-order, time-homogeneous model misses.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">states</span> <span class="o">=</span> <span class="n">rain</span><span class="p">[</span><span class="s2">"wet"</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-<span class="n">split</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.8</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">states</span><span class="p">))</span>
-<span class="n">train_states</span> <span class="o">=</span> <span class="n">states</span><span class="p">[:</span><span class="n">split</span><span class="p">]</span>
-<span class="n">test_states</span> <span class="o">=</span> <span class="n">states</span><span class="p">[</span><span class="n">split</span><span class="p">:]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">estimate_P</span><span class="p">(</span><span class="n">states</span><span class="p">):</span>
+    <span class="c1"># Count the transitions today -&gt; tomorrow and divide each row by its total.</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">today</span><span class="p">,</span> <span class="n">tomorrow</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">states</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">states</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+        <span class="n">counts</span><span class="p">[</span><span class="n">today</span><span class="p">,</span> <span class="n">tomorrow</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">counts</span> <span class="o">/</span> <span class="n">counts</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="n">train_dates</span> <span class="o">=</span> <span class="n">rain</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span> <span class="n">split</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"date"</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-<span class="n">consecutive_train_pair</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">train_dates</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"timedelta64[D]"</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
-<span class="p">)</span>
-<span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">current</span><span class="p">,</span> <span class="n">following</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-    <span class="n">train_states</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">consecutive_train_pair</span><span class="p">],</span>
-    <span class="n">train_states</span><span class="p">[</span><span class="mi">1</span><span class="p">:][</span><span class="n">consecutive_train_pair</span><span class="p">],</span>
-<span class="p">):</span>
-    <span class="n">counts</span><span class="p">[</span><span class="n">current</span><span class="p">,</span> <span class="n">following</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="n">split</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.8</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">wet</span><span class="p">))</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">wet</span><span class="p">[:</span><span class="n">split</span><span class="p">]</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">wet</span><span class="p">[</span><span class="n">split</span><span class="p">:]</span>
 
-<span class="n">row_totals</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">assert</span> <span class="p">(</span><span class="n">row_totals</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-<span class="n">P</span> <span class="o">=</span> <span class="n">counts</span> <span class="o">/</span> <span class="n">row_totals</span>
-
-<span class="n">transition_table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-    <span class="n">P</span><span class="p">,</span>
-    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">"current dry"</span><span class="p">,</span> <span class="s2">"current wet"</span><span class="p">],</span>
-    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"next dry"</span><span class="p">,</span> <span class="s2">"next wet"</span><span class="p">],</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Consecutive-day transition counts:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">counts</span><span class="p">)</span>
-<span class="n">transition_table</span>
+<span class="n">P_rain</span> <span class="o">=</span> <span class="n">estimate_P</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"estimated P:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">P_rain</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"stationary distribution:"</span><span class="p">,</span> <span class="n">stationary</span><span class="p">(</span><span class="n">P_rain</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c172bb6c4ea9c6461520dedc1e52725d">
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c179d30fe7fced71ac2ec887b950c976">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Step-2:-simulate-the-fitted-chain,-and-a-model-without-memory">Step 2: simulate the fitted chain, and a model without memory<a class="anchor-link" href="#Step-2:-simulate-the-fitted-chain,-and-a-model-without-memory">¶</a></h3><p>The Markov simulation draws tomorrow from the row of today. The model without memory draws every day independently: wet with probability equal to the wet fraction of the training period.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c326f9540ceaf74184a09a0bc046750c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7688,108 +7907,23 @@ for patterns that a first-order, time-homogeneous model misses.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">state_names</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">"dry"</span><span class="p">,</span> <span class="s2">"wet"</span><span class="p">])</span>
-<span class="n">positive_edges</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="n">state_names</span><span class="p">[</span><span class="n">current</span><span class="p">],</span> <span class="n">state_names</span><span class="p">[</span><span class="n">following</span><span class="p">],</span> <span class="n">P</span><span class="p">[</span><span class="n">current</span><span class="p">,</span> <span class="n">following</span><span class="p">])</span>
-    <span class="k">for</span> <span class="n">current</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">following</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="n">current</span><span class="p">,</span> <span class="n">following</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
-<span class="p">]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">2026</span><span class="p">)</span>
 
-<span class="c1"># For a two-state chain, both cross-state edges give irreducibility. In an</span>
-<span class="c1"># irreducible two-state chain, either positive self-loop gives aperiodicity.</span>
-<span class="n">irreducible</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">P</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">aperiodic</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">irreducible</span> <span class="ow">and</span> <span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">P</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">simulate_chain</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
+    <span class="c1"># One path of length T started in x0: draw the next state from the row of the current state.</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">x0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">),</span> <span class="n">p</span><span class="o">=</span><span class="n">P</span><span class="p">[</span><span class="n">path</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
-<span class="n">switching_mass</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">P</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-<span class="k">if</span> <span class="n">switching_mass</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="n">stationary</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">P</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">P</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span> <span class="o">/</span> <span class="n">switching_mass</span>
-    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">stationary</span> <span class="o">@</span> <span class="n">P</span><span class="p">,</span> <span class="n">stationary</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">stationary</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">])</span>
+<span class="n">markov_sim</span> <span class="o">=</span> <span class="n">simulate_chain</span><span class="p">(</span><span class="n">P_rain</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">test</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">T</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">),</span> <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+<span class="n">iid_sim</span> <span class="o">=</span> <span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">train</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Positive directed edges (from, to, probability):"</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">positive_edges</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Irreducible:"</span><span class="p">,</span> <span class="n">irreducible</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Aperiodic:"</span><span class="p">,</span> <span class="n">aperiodic</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Estimated stationary distribution [dry, wet]:"</span><span class="p">,</span> <span class="n">stationary</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Training wet fraction:"</span><span class="p">,</span> <span class="n">train_states</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c03ff4ab7b93efd7eda38e95a6e592c9">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Interpret each positive entry $P(i,j)$ as a directed edge from today's state $i$ to tomorrow's state $j$, weighted by its fitted transition probability. For this two-state chain, positive edges in both directions make the graph strongly connected (the chain is irreducible). A positive self-loop then makes the irreducible chain aperiodic. These checks concern the fitted model, not proof that the rainfall process is truly homogeneous or first-order Markov.</p>
-<p>The stationary distribution is also a property of the fitted matrix. It is not a claim that the observed time series has already converged or that the weather mechanism is stationary. The same graph language is used for random walks on larger networks: states become vertices and positive transition probabilities become directed weighted edges.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c39f5fad1ffcfed68cc2e578d99e7672">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.-Simulate-from-the-fitted-chain">3. Simulate from the fitted chain<a class="anchor-link" href="#3.-Simulate-from-the-fitted-chain">¶</a></h2>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cc6a98ea2c2aab59930f0a3ac8f5943f">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">2026</span><span class="p">)</span>
-
-<span class="c1"># Start on the last training day. For each held-out record, advance once per</span>
-<span class="c1"># elapsed calendar day and then store the state aligned with that record.</span>
-<span class="n">heldout_dates</span> <span class="o">=</span> <span class="n">rain</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">split</span><span class="p">:,</span> <span class="s2">"date"</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-<span class="n">boundary_and_heldout_dates</span> <span class="o">=</span> <span class="n">rain</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">split</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:,</span> <span class="s2">"date"</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-<span class="n">day_gaps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">boundary_and_heldout_dates</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"timedelta64[D]"</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">day_gaps</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">test_states</span><span class="p">)</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">day_gaps</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span>
-
-<span class="n">simulated</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">test_states</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
-<span class="n">current_state</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">train_states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">gap</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">day_gaps</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gap</span><span class="p">):</span>
-        <span class="n">current_state</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">P</span><span class="p">[</span><span class="n">current_state</span><span class="p">])</span>
-    <span class="n">simulated</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_state</span>
-
-<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">simulated</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">test_states</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Held-out observed wet fraction: </span><span class="si">{</span><span class="n">test_states</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Simulated wet fraction:         </span><span class="si">{</span><span class="n">simulated</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-
-<span class="n">n_show</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">test_states</span><span class="p">))</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">))</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">heldout_dates</span><span class="p">[:</span><span class="n">n_show</span><span class="p">],</span> <span class="n">test_states</span><span class="p">[:</span><span class="n">n_show</span><span class="p">],</span> <span class="n">where</span><span class="o">=</span><span class="s2">"post"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"held-out observed"</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span>
-    <span class="n">heldout_dates</span><span class="p">[:</span><span class="n">n_show</span><span class="p">],</span>
-    <span class="n">simulated</span><span class="p">[:</span><span class="n">n_show</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.04</span><span class="p">,</span>
-    <span class="n">where</span><span class="o">=</span><span class="s2">"post"</span><span class="p">,</span>
-    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span>
-    <span class="n">label</span><span class="o">=</span><span class="s2">"one aligned simulation (offset)"</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
-    <span class="n">xlabel</span><span class="o">=</span><span class="s2">"date in held-out period"</span><span class="p">,</span>
-    <span class="n">ylabel</span><span class="o">=</span><span class="s2">"wet indicator"</span><span class="p">,</span>
-    <span class="n">title</span><span class="o">=</span><span class="s2">"Observed sequence and one fitted-chain simulation"</span><span class="p">,</span>
-    <span class="n">yticks</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-<span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">n_show</span> <span class="o">=</span> <span class="mi">150</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">([</span><span class="n">test</span><span class="p">[:</span><span class="n">n_show</span><span class="p">],</span> <span class="n">markov_sim</span><span class="p">[:</span><span class="n">n_show</span><span class="p">],</span> <span class="n">iid_sim</span><span class="p">[:</span><span class="n">n_show</span><span class="p">]],</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"Blues_r"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s2">"observed"</span><span class="p">,</span> <span class="s2">"Markov"</span><span class="p">,</span> <span class="s2">"no memory"</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"day in test period (dark = dry, white = wet)"</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -7797,17 +7931,17 @@ for patterns that a first-order, time-homogeneous model misses.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c1e41322a8f816ddede7b4903158ee49">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cdbfdeee897da0d95f299ecf105d6647">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="4.-Does-dependence-improve-next-day-prediction?">4. Does dependence improve next-day prediction?<a class="anchor-link" href="#4.-Does-dependence-improve-next-day-prediction?">¶</a></h2>
+<h3 id="Step-3:-compare-summary-statistics">Step 3: compare summary statistics<a class="anchor-link" href="#Step-3:-compare-summary-statistics">¶</a></h3><p>A <strong>spell</strong> is a maximal run of consecutive wet (or dry) days. The Markov chain can create long spells because today's weather influences tomorrow's; the model without memory cannot.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c8a110e209f42aa445085e3c49f86e46">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=caf10662544f18d31da222b965e8734d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7815,126 +7949,51 @@ for patterns that a first-order, time-homogeneous model misses.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">evaluation_dates</span> <span class="o">=</span> <span class="n">rain</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">split</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:,</span> <span class="s2">"date"</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-<span class="n">consecutive_test_pair</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">evaluation_dates</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"timedelta64[D]"</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
-<span class="p">)</span>
-<span class="n">previous</span> <span class="o">=</span> <span class="n">states</span><span class="p">[</span><span class="n">split</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">consecutive_test_pair</span><span class="p">]</span>
-<span class="n">following</span> <span class="o">=</span> <span class="n">states</span><span class="p">[</span><span class="n">split</span><span class="p">:][</span><span class="n">consecutive_test_pair</span><span class="p">]</span>
-<span class="n">markov_prob_wet</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">previous</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-<span class="n">iid_prob_wet</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">markov_prob_wet</span><span class="p">,</span> <span class="n">train_states</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">spell_lengths</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+    <span class="c1"># Lengths of all maximal runs of `state` in the 0/1 sequence x.</span>
+    <span class="n">lengths</span><span class="p">,</span> <span class="n">run</span> <span class="o">=</span> <span class="p">[],</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="n">state</span><span class="p">:</span>
+            <span class="n">run</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">run</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">lengths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+            <span class="n">run</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">run</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">lengths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">lengths</span><span class="p">)</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">binary_log_loss</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">probability</span><span class="p">):</span>
-    <span class="n">probability</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">probability</span><span class="p">,</span> <span class="mf">1e-12</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="mf">1e-12</span><span class="p">)</span>
-    <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
-        <span class="n">y_true</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">probability</span><span class="p">)</span>
-        <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y_true</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">probability</span><span class="p">)</span>
-    <span class="p">)</span>
-
-<span class="n">markov_loss</span> <span class="o">=</span> <span class="n">binary_log_loss</span><span class="p">(</span><span class="n">following</span><span class="p">,</span> <span class="n">markov_prob_wet</span><span class="p">)</span>
-<span class="n">iid_loss</span> <span class="o">=</span> <span class="n">binary_log_loss</span><span class="p">(</span><span class="n">following</span><span class="p">,</span> <span class="n">iid_prob_wet</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Held-out Markov one-step log loss: </span><span class="si">{</span><span class="n">markov_loss</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Held-out IID Bernoulli log loss:   </span><span class="si">{</span><span class="n">iid_loss</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Consecutive held-out transitions evaluated:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">following</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c8a6e72e831e963ba1b810182d8945bb">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">regular_lag_correlation</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">lag</span><span class="p">):</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">values</span><span class="p">[:</span><span class="o">-</span><span class="n">lag</span><span class="p">]</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="n">lag</span><span class="p">:]</span>
-    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">y</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">calendar_lag_correlation</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">lag</span><span class="p">):</span>
-    <span class="n">present</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[[</span><span class="s2">"date"</span><span class="p">,</span> <span class="s2">"wet"</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">"wet"</span><span class="p">:</span> <span class="s2">"present"</span><span class="p">})</span>
-    <span class="n">future</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[[</span><span class="s2">"date"</span><span class="p">,</span> <span class="s2">"wet"</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">"wet"</span><span class="p">:</span> <span class="s2">"future"</span><span class="p">})</span>
-    <span class="n">future</span><span class="p">[</span><span class="s2">"date"</span><span class="p">]</span> <span class="o">=</span> <span class="n">future</span><span class="p">[</span><span class="s2">"date"</span><span class="p">]</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">lag</span><span class="p">)</span>
-    <span class="n">pairs</span> <span class="o">=</span> <span class="n">present</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">future</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">"date"</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">"inner"</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">pairs</span><span class="p">[</span><span class="s2">"present"</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">pairs</span><span class="p">[</span><span class="s2">"future"</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="k">return</span> <span class="n">pairs</span><span class="p">[</span><span class="s2">"present"</span><span class="p">]</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">pairs</span><span class="p">[</span><span class="s2">"future"</span><span class="p">])</span>
-
-<span class="n">lags</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
-<span class="n">test_frame</span> <span class="o">=</span> <span class="n">rain</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">split</span><span class="p">:][[</span><span class="s2">"date"</span><span class="p">,</span> <span class="s2">"wet"</span><span class="p">]]</span>
-<span class="n">observed_corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-    <span class="p">[</span><span class="n">calendar_lag_correlation</span><span class="p">(</span><span class="n">test_frame</span><span class="p">,</span> <span class="n">lag</span><span class="p">)</span> <span class="k">for</span> <span class="n">lag</span> <span class="ow">in</span> <span class="n">lags</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">simulated_corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-    <span class="p">[</span><span class="n">regular_lag_correlation</span><span class="p">(</span><span class="n">simulated</span><span class="p">,</span> <span class="n">lag</span><span class="p">)</span> <span class="k">for</span> <span class="n">lag</span> <span class="ow">in</span> <span class="n">lags</span><span class="p">]</span>
-<span class="p">)</span>
-
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">))</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lags</span><span class="p">,</span> <span class="n">observed_corr</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"o"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"held-out observed"</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lags</span><span class="p">,</span> <span class="n">simulated_corr</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"s"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"fitted-chain simulation"</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"black"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">"lag in days"</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">"correlation"</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Dependence diagnostic"</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c8b415674b90bae3ca95af89a1989195">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="n">criticism</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-    <span class="p">{</span>
-        <span class="s2">"model choice"</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">"binary wet/dry states"</span><span class="p">,</span>
-            <span class="s2">"first-order memory"</span><span class="p">,</span>
-            <span class="s2">"one transition matrix"</span><span class="p">,</span>
-            <span class="s2">"missing or duplicated dates"</span><span class="p">,</span>
-            <span class="s2">"chronological held-out period"</span><span class="p">,</span>
-            <span class="s2">"IID baseline"</span><span class="p">,</span>
-        <span class="p">],</span>
-        <span class="s2">"what it misses or tests"</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">"rainfall amount and threshold sensitivity"</span><span class="p">,</span>
-            <span class="s2">"longer wet or dry spells"</span><span class="p">,</span>
-            <span class="s2">"seasonality, climate trends, and rule changes"</span><span class="p">,</span>
-            <span class="s2">"duplicates are removed and only consecutive-day transitions are fitted"</span><span class="p">,</span>
-            <span class="s2">"future-like evaluation but not independence"</span><span class="p">,</span>
-            <span class="s2">"ignores the observed lag dependence"</span><span class="p">,</span>
-        <span class="p">],</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">"fraction wet"</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="s2">"P(wet | wet yesterday)"</span><span class="p">:</span> <span class="n">estimate_P</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="s2">"mean dry spell (days)"</span><span class="p">:</span> <span class="n">spell_lengths</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="s2">"mean wet spell (days)"</span><span class="p">:</span> <span class="n">spell_lengths</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="s2">"longest dry spell (days)"</span><span class="p">:</span> <span class="n">spell_lengths</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+        <span class="s2">"longest wet spell (days)"</span><span class="p">:</span> <span class="n">spell_lengths</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
     <span class="p">}</span>
-<span class="p">)</span>
-<span class="n">criticism</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">"observed (test)"</span><span class="p">:</span> <span class="n">summary</span><span class="p">(</span><span class="n">test</span><span class="p">),</span>
+    <span class="s2">"Markov simulation"</span><span class="p">:</span> <span class="n">summary</span><span class="p">(</span><span class="n">markov_sim</span><span class="p">),</span>
+    <span class="s2">"no memory"</span><span class="p">:</span> <span class="n">summary</span><span class="p">(</span><span class="n">iid_sim</span><span class="p">),</span>
+<span class="p">})</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ca69a6ce8915158caaacb5923dcd6658">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c80bf805df2f70ec405474bb5e80ef9b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput celltag_exercise" data-mime-type="text/markdown">
-<h2 id="Recap">Recap<a class="anchor-link" href="#Recap">¶</a></h2><p>Before you finish, make sure you can:</p>
-<ol>
-<li>Report the fitted transition matrix, interpret each row, and draw its positive-entry directed graph. State whether the fitted two-state chain is irreducible and aperiodic, with reasons.</li>
-<li>Verify the stationary calculation and explain why it is a property of the fitted matrix rather than evidence that the weather mechanism is stationary.</li>
-<li>Compare the Markov and IID held-out log losses without claiming that a small difference proves the Markov model is true.</li>
-<li>Use the lag plot to name one failure of the first-order homogeneous model.</li>
-<li>Propose one additional state or covariate and explain what data would be needed to fit it.</li>
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Discussion-questions">Discussion questions<a class="anchor-link" href="#Discussion-questions">¶</a></h2><ol>
+<li>Why does checking the return times only up to $k = n$ give the wrong period for the matrix $P$ in exercise 25b?</li>
+<li>The stationary distribution of the fitted chain is close to the observed wet fraction. Does this show that the rainfall is a Markov chain? Why or why not?</li>
+<li>Which statistics in the table does the Markov chain reproduce well? Which ones does the model without memory get wrong, and why?</li>
+<li>Run the simulation cell again: the table changes. How could you decide whether a difference between the observed and the simulated column is real or just randomness?</li>
 </ol>
 </div>
 </div>
